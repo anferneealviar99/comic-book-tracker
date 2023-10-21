@@ -15,6 +15,22 @@ def login():
 
     return api
     
+def gen_menu():
+    welcome = "Welcome to the Comic Book Tracker!"
+    menu  = """Please select one of the following options:
+    1) Add new comic
+    2) View upcoming comics
+    3) View all comics
+    4) View read comics
+    5) Exit
+    
+    Your selection: """
+
+    print(welcome)
+    
+    user_input = input(menu)
+    
+    return user_input
 def menu():
     menuOptionString = "Select\n1. Add new comic\n2. Show current reading list\n3. Exit\n"
 
@@ -60,7 +76,7 @@ def main():
     menuOption = 0
 
     while True:
-        menuOption = menu()
+        menuOption = gen_menu()
 
         match menuOption:
             case "1":

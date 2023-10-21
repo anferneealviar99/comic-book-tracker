@@ -1,5 +1,3 @@
-from src import classes
-
 from classes import GraphicNovel
 
 novel_name = "Batman: The Court of Owls"
