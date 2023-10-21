@@ -3,8 +3,8 @@ import mokkari, getpass
 
 
 def login():
-    username = input("Enter your username: ")
-    password = getpass.getpass("Enter your password: ")
+    username = input("Enter your Metron username: ")
+    password = getpass.getpass("Enter your Metron password: ")
 
     try:
         api = mokkari.api(username, password)
