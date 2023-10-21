@@ -1,30 +1,6 @@
 import mokkari, getpass
 
-class TrackerEntry:
-    def __init__(self, comicBookDetails, status, rating=None, review=None):
-        self.comicBookDetails = comicBookDetails
-        self.status = status 
-        self.rating = rating 
-        self.review = review  
 
-class ComicBook:
-    def __init__(self, name, writer, penciller, inker, colorist, letterer, editor):
-        self.name = name 
-        self.writer = writer
-        self.penciller = penciller 
-        self.inker = inker
-        self.colorist = colorist
-        self.letterer = letterer
-        self.editor = editor 
-
-    def printDetails(self):
-        print(f'Comic Book Title: {self.name}')
-        print(f'Writer: {self.writer}')
-        print(f'Penciller: {self.penciller}')
-        print(f'Inker: {self.inker}')
-        print(f'Colorist: {self.colorist}')
-        print(f'Letterer: {self.letterer}')
-        print(f'Editor: {self.editor}')
 
 def login():
     username = input("Enter your username: ")
@@ -48,7 +24,7 @@ def menu():
 
     return menuOption
 
-def search(api, title, publisher):
+def getComic(api, title, publisher):
     info = title.split("#")
 
     print(info)
@@ -90,8 +66,11 @@ def main():
             case "1":
                 title = input("Enter title of the comic book: ")
                 publisher = input("Enter publisher name: ")
-                comic_book = search(api, title, publisher)
-                add_to_tracker(comic_book)
+                comic_book = getComic(api, title, publisher)
+                if comic_book is not None:
+                    add_to_tracker(comic_book)
+                else:
+                    print("Please enter the following details:\n")
             case "2":
                 print("Current List:")
             case "3":
