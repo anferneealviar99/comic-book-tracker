@@ -24,3 +24,5 @@ class ComicBookIssue:
         self.colorist = colorist
         self.letterer = letterer
         self.editor = editor 
+
+#TODO change classes 

@@ -15,7 +15,7 @@ def login():
 
     return api
     
-def gen_menu():
+def gen_main_menu():
     welcome = "Welcome to the Comic Book Tracker!"
     menu  = """Please select one of the following options:
     1) Add new comic
@@ -96,7 +96,7 @@ def main():
     menuOption = 0
 
     while True:
-        menuOption = gen_menu()
+        menuOption = gen_main_menu()
 
         match int(menuOption):
             case 1:
@@ -122,3 +122,6 @@ def main():
     
 
 main()
+
+#TODO separate menus into a file UserInterface.py
+#TODO enter inputs which coincide with the Mokkari API 
