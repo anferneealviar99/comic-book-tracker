@@ -1,3 +1,5 @@
 myvenv/
 *.env
 *.db*
+/__pycache__/
+src/__pycache__/
