@@ -1,9 +1,9 @@
-import mokkari, os
+import mokkari, os, database
 from dotenv import load_dotenv
 from simyan.comicvine import Comicvine
 from simyan.sqlite_cache import SQLiteCache
 from user_interface import main_menu, add_comic_menu
-import database
+from classes import ComicBookIssue
 
 load_dotenv('key.env')
 mokkari_user = os.getenv('MOKKARI_USERNAME')
@@ -46,9 +46,15 @@ def search_issue(title):
     #             return issue_details
     # else:
     #     return series_matches[0]
-            
-def get_credits(credits):
+
+def search_credits(credits, role):
     for credit in credits:
+        roles = credit.role
+
+        for role_entry in roles:
+            if role.capitalize() == role_entry.name:
+                return credit.creator
+    
 
 
 def add_comic_issue():
@@ -56,9 +62,20 @@ def add_comic_issue():
     
     issue_details = search_issue(title)
 
-    credits = issue_details.credits
+    publisher = issue_details.publisher.name
 
-    writer = get_credits(credits)
+    credits = issue_details.credits
+    writer = search_credits(credits, "writer")
+    penciller = search_credits(credits, "penciller")
+    inker = search_credits(credits, "inker")
+    colorist = search_credits(credits, "colorist")
+    letterer = search_credits(credits, "letterer")
+    editor = search_credits(credits, "editor")
+
+    issue_entry = ComicBookIssue(title, publisher, writer, penciller, inker, colorist, letterer, editor)
+
+    database.add_comic(issue_entry)
+
 
 def add_new_comic():
     menuOption = 0
@@ -75,7 +92,7 @@ def add_new_comic():
 
 
 def main():
-    database.create_database()
+    database.create_tables()
 
     menuOption = 0
 
