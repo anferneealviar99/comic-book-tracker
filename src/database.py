@@ -17,9 +17,7 @@ CREATE_READING_LIST_TABLE = """CREATE TABLE IF NOT EXISTS read (
     review TEXT,
 )"""
 
-INSERT_COMIC = """INSERT INTO comics (
-    title, publisher, writer, penciller, letterer, colorist, inker, editor VALUES (? ? ? ? ? ? ? ?)
-)"""
+INSERT_COMIC = """INSERT INTO comics (title, publisher, writer, penciller, letterer, colorist, inker, editor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
 
 SELECT_ALL_COMICS = "SELECT * FROM comics"
 
@@ -31,7 +29,7 @@ def create_tables():
 
 def add_comic(comic):
     with connection:
-        connection.execute(INSERT_COMIC, (comic.title, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.inker, comic.editor))
+        connection.execute(INSERT_COMIC, (comic.name, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.letterer, comic.editor))
 
 def get_comics():
     with connection:
