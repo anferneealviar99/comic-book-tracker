@@ -7,7 +7,8 @@ CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
     penciller TEXT,
     letterer TEXT,
     colorist TEXT,
-    inker TEXT
+    inker TEXT,
+    editor TEXT
 )"""
 
 CREATE_READING_LIST_TABLE = """CREATE TABLE IF NOT EXISTS read (
