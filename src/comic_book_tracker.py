@@ -124,4 +124,4 @@ def main():
 main()
 
 #TODO separate menus into a file UserInterface.py
-#TODO enter inputs which coincide with the Mokkari API 
+#TODO enter inputs which coincide with the Mokkari API - maybe? ComicVine API might be better honestly
