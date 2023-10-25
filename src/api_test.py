@@ -1,23 +1,20 @@
-import mokkari 
-import getpass
+import mokkari, os
+from dotenv import load_dotenv
 
-username = input("Enter your username: ")
-password = getpass.getpass("Enter your password: ")
+load_dotenv('key.env')
+username = os.getenv('MOKKARI_USERNAME')
+password = os.getenv('MOKKARI_PASSWORD')
 
 try:
     api = mokkari.api(username, password)
 except mokkari.exceptions.AuthenticationError as e:
     print("Invalid user name and password.")
 
-# Test publisher
+# Get all Marvel comics for the week of 2021-06-07
+asm = api.issues_list({"series_name": "Amazing Spider-Man", "issue_number": "50", "year_began": "1963", "publisher_name": "marvel"})
 
-pub_result = api.publisher(2)
-
-pub_name = pub_result.name
-pub_founded = pub_result.founded
-pub_desc = pub_result.desc
-
-print(f'Name: {pub_name}\nFounded: {pub_founded}\nDescription: {pub_desc}')
-
+# Print the results
+for i in asm:
+    print(f"{i.id} {i.issue_name}")
 
 
