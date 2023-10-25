@@ -1,5 +1,4 @@
-import mokkari, getpass
-
+import simyan, mokkari
 
 
 def login():
@@ -91,7 +90,7 @@ def addToTracker(comic_book):
     
 
 def main():
-    api = login()
+    
 
     menuOption = 0
 
