@@ -1,35 +1,16 @@
-import simyan, mokkari
+import mokkari, os
+from dotenv import load_dotenv
+from simyan.comicvine import Comicvine
+from simyan.sqlite_cache import SQLiteCache
+from user_interface import main_menu, add_comic_menu
 
+load_dotenv('key.env')
+comicvine_api_key = os.getenv('COMICVINE_API_KEY')
+mokkari_user = os.getenv('MOKKARI_USERNAME')
+mokkari_password = os.getenv('MOKKARI_PASSWORD')
 
-def login():
-    username = input("Enter your Metron username: ")
-    password = getpass.getpass("Enter your Metron password: ")
-
-    try:
-        api = mokkari.api(username, password)
-    except mokkari.exceptions.AuthenticationError as e:
-        print("Invalid user name and password.")
-
-    print("Login successful.")
-
-    return api
-    
-def gen_main_menu():
-    welcome = "Welcome to the Comic Book Tracker!"
-    menu  = """Please select one of the following options:
-    1) Add new comic
-    2) View upcoming comics
-    3) View all comics in tracker
-    4) View read comics
-    5) Exit
-    
-    Your selection: """
-
-    print(welcome)
-    
-    user_input = input(menu)
-    
-    return user_input
+mokkari_api = mokkari.api(mokkari_user, mokkari_password)
+comicvine_api = Comicvine(api_key=comicvine_api_key, cache=SQLiteCache())
 
 def getComic(api, title, publisher):
     info = title.split("#")
@@ -87,25 +68,29 @@ def addToTracker(comic_book):
     writer = getWriter(creators) 
     print(writer)
 
-    
-
-def main():
-    
-
+def add_new_comic():
     menuOption = 0
 
-    while True:
-        menuOption = gen_main_menu()
+    menuOption = add_comic_menu()
+
+    match int(menuOption):
+        case 1:
+            print("Adding a comic book issue...")
+        case 2:
+            print("Adding collected editions...")
+        case 3:
+            print("Going back...")
+
+
+def main():
+    menuOption = 0
+
+    while menuOption != '5':
+        menuOption = main_menu()
 
         match int(menuOption):
             case 1:
-                title = input("Enter title of the comic book: ")
-                publisher = input("Enter publisher name: ")
-                comic_book = getComic(api, title, publisher)
-                if comic_book is not None:
-                    addToTracker(comic_book)
-                else:
-                    print("Please enter the following details:\n")
+                add_new_comic() 
             case 2:
                 print("UPCOMING COMICS")
             case 3:
