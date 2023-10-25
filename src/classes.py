@@ -16,8 +16,9 @@ class GraphicNovel:
         self.letterers = letterers 
     
 class ComicBookIssue:
-    def __init__(self, name, writer, penciller, inker, colorist, letterer, editor):
+    def __init__(self, name, publisher, writer, penciller, inker, colorist, letterer, editor):
         self.name = name 
+        self.publisher = publisher
         self.writer = writer
         self.penciller = penciller 
         self.inker = inker
