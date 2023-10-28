@@ -95,6 +95,9 @@ def add_graphic_novel():
         credits = issue.credits
 
         writer = search_credits(credits, "writer")
+
+        if writer is None:
+            writer = search_credits(credits, "plot")
         
         if writer not in writers:
             writers.append(writer)
