@@ -51,13 +51,11 @@ def find_issues_in_range(issue):
     issue_range = issue_comp[1].split('-')
     series_name = issue_comp[0].strip()
 
-    print(series_name, issue_range)
     all_issues = []
     for i in range(int(issue_range[0]), int(issue_range[1]) + 1, 1):
         issue_string = f'{series_name} #{i}'
         all_issues.append(issue_string)
     
-    print(all_issues)
     return all_issues 
 
 def search_issues(issues_list, issue_details_list, publisher):
@@ -89,6 +87,7 @@ def add_graphic_novel():
 
     for issue in issue_details_list:
         issue_series = issue.series.name
+        year_began = issue.series.year_began
         issue_number = issue.number
         publisher = issue.publisher.name
 
@@ -124,8 +123,8 @@ def add_graphic_novel():
         if editor not in editors:
             editors.append(editor)
 
-        print(",".join([writer, inker, colorist, letterer, editor]))
         single_issue = ComicBookIssue(issue_series, 
+                                      year_began,
                                       issue_number, 
                                       publisher,
                                       writer,

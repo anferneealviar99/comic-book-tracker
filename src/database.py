@@ -3,6 +3,7 @@ import sqlite3
 CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
     id INTEGER PRIMARY KEY,
     series TEXT,
+    year TEXT,
     number INTEGER,
     publisher TEXT,
     writer TEXT,
@@ -26,7 +27,7 @@ CREATE_TRADES_TABLE = """CREATE TABLE IF NOT EXISTS trades (
     editors TEXT
 )"""
 
-INSERT_COMIC = """INSERT INTO comics (series, number, publisher, writer, penciller, letterer, colorist, inker, editor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+INSERT_COMIC = """INSERT INTO comics (series, year, number, publisher, writer, penciller, letterer, colorist, inker, editor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
 INSERT_TRADE =  """INSERT INTO trades (title, publisher, issues, writers, pencillers, letterers, colorists, inkers, editors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
@@ -41,11 +42,11 @@ def create_tables():
 
 def add_comic(comic):
     with connection:
-        connection.execute(INSERT_COMIC, (comic.series, comic.number, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.letterer, comic.editor))
+        connection.execute(INSERT_COMIC, (comic.series, comic.year_began, comic.number, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.letterer, comic.editor))
 
 def add_trade(trade):
     with connection:
-        connection(INSERT_TRADE, (trade.name, trade.publisher, trade.issues, 
+        connection.execute(INSERT_TRADE, (trade.name, trade.publisher, trade.issues, 
                                   trade.writers, trade.pencillers, trade.inkers,
                                   trade.colorists, trade.letterers, trade.editors))
 def get_comics():
