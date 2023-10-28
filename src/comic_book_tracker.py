@@ -10,7 +10,7 @@ mokkari_password = os.getenv('MOKKARI_PASSWORD')
 mokkari_api = mokkari.api(mokkari_user, mokkari_password)
 
 #TODO any individual issues inside a trade should be added onto the single comics as well
-def search_issue(title):
+def search_issue(title, publisher):
 
     title_components = title.split("#")
     series_num = title_components[1].strip()
@@ -25,13 +25,18 @@ def search_issue(title):
     issues = mokkari_api.issues_list({
         "series_name": series_name,
         "issue_number": series_num,
-        "year_began": year
+        "year_began": year,
+        "publisher_name": publisher
     })
 
-    for issue in issues:
-        if title in issue.issue_name:
-            issue_details = mokkari_api.issue(issue.id)
-            return issue_details
+    issue_obj = [issue for issue in issues if issue.issue_name == title]
+    
+    return mokkari_api.issue(issue_obj[0].id)
+
+    # for issue in issues:
+    #     if title in issue.issue_name:
+    #         issue_details = mokkari_api.issue(issue.id)
+    #         return issue_details
 
 def search_credits(credits, role):
     for credit in credits:
@@ -44,22 +49,24 @@ def search_credits(credits, role):
 def find_issues_in_range(issue):
     issue_comp = issue.split("#")
     issue_range = issue_comp[1].split('-')
-    series_name = issue_comp[0]
+    series_name = issue_comp[0].strip()
 
+    print(series_name, issue_range)
     all_issues = []
-    for i in range(issue_range[0], issue_range[1] + 1, 1):
+    for i in range(int(issue_range[0]), int(issue_range[1]) + 1, 1):
         issue_string = f'{series_name} #{i}'
         all_issues.append(issue_string)
-
+    
+    print(all_issues)
     return all_issues 
 
-def search_issues(issues_list, issue_details_list):
+def search_issues(issues_list, issue_details_list, publisher):
     for issue in issues_list:
         if '-' in issue:
             issues_string = find_issues_in_range(issue)
-            issue_details = search_issues(issues_string)
+            issue_details = search_issues(issues_string, issue_details_list, publisher)
         else:
-            issue_details = search_issue(issue)
+            issue_details = search_issue(issue, publisher)
             issue_details_list.append(issue_details)
 
 def add_graphic_novel():
@@ -67,11 +74,12 @@ def add_graphic_novel():
     
     issues_list = input("Please enter all issues associated with this graphic novel/trade paperback: ").split(",")
 
+    publisher = input("Please enter the name of the publisher: ")
+    
     issue_details_list = []
 
-    search_issues(issues_list, issue_details_list)
+    search_issues(issues_list, issue_details_list, publisher)
 
-    publisher = issue_details_list[0].publisher.name
     writers = []
     pencillers = []
     inkers = []
@@ -82,6 +90,7 @@ def add_graphic_novel():
     for issue in issue_details_list:
         issue_series = issue.series.name
         issue_number = issue.number
+        publisher = issue.publisher.name
 
         credits = issue.credits
 
@@ -115,6 +124,7 @@ def add_graphic_novel():
         if editor not in editors:
             editors.append(editor)
 
+        print(",".join([writer, inker, colorist, letterer, editor]))
         single_issue = ComicBookIssue(issue_series, 
                                       issue_number, 
                                       publisher,
@@ -139,9 +149,9 @@ def add_graphic_novel():
     
     database.add_trade(trade)
 
-def add_comic_issue(title):
+def add_comic_issue(title, publisher):
     try:
-        issue_details = search_issue(title)
+        issue_details = search_issue(title, publisher)
 
         if issue_details is None:
             raise InvalidComicIssueException
@@ -172,9 +182,11 @@ def add_new_comic():
     if int(menuOption) == 1:
         print("Adding a comic book issue...")
         title = input("Enter the name of the comic book issue: ")
-        add_comic_issue(title)
+        publisher = input("Enter the name of the publisher: ")
+        add_comic_issue(title, publisher)
     elif int(menuOption) == 2:
         print("Adding collected editions...")
+        add_graphic_novel()
     elif int(menuOption) == 3:
         print("Going back...")
 
