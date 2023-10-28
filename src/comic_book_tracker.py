@@ -101,6 +101,9 @@ def add_graphic_novel():
 
         penciller = search_credits(credits, "penciller")
 
+        if penciller is None:
+            penciller = search_credits(credits, "artist")
+
         if penciller not in pencillers:
             pencillers.append(penciller)
 
@@ -136,13 +139,13 @@ def add_graphic_novel():
         
         database.add_comic(single_issue)
 
-    all_issues = ",".join(issues_list)
-    all_writers = ",".join(writers)
-    all_pencillers = ",".join(pencillers)
-    all_inkers = ",".join(inkers)
-    all_colorists  = ",".join(colorists)
-    all_letterers = ",".join(letterers)
-    all_editors = ",".join(editors)
+    all_issues = ", ".join(issues_list)
+    all_writers = ", ".join(writers)
+    all_pencillers = ", ".join(pencillers)
+    all_inkers = ", ".join(inkers)
+    all_colorists  = ", ".join(colorists)
+    all_letterers = ", ".join(letterers)
+    all_editors = ", ".join(editors)
 
     trade = Trade(title, all_issues, all_writers, all_pencillers,
                   all_inkers, all_colorists, all_letterers, all_editors)
