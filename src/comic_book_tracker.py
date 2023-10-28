@@ -270,7 +270,7 @@ def add_new_comic():
 
 
 def print_comics_list(comics):
-    print("-----ALL COMICS-------")
+    print("----------ALL COMICS----------")
 
     for comic in comics:
         series_name = comic[1]
@@ -285,7 +285,7 @@ def print_comics_list(comics):
 
 
 def print_trades_list(trades):
-    print("-----ALL TRADES-----")
+    print("----------ALL TRADES----------")
     
     for trade in trades:
         trade_name = trade[1]
@@ -294,14 +294,13 @@ def print_trades_list(trades):
         writers = trade[4]
         pencillers = trade[5]
             
-        print(f'{trade_name}, consisting of {trade_issues} by {writers} and {pencillers}')
+        print(f'{trade_name} ({trade_issues}) by {writers} and {pencillers}')
 
 def show_all_comics():
     menuOption = 0
 
     while menuOption != '3':
         menuOption = show_all_comics_menu()
-
         if menuOption == '1':
             comics = database.get_comics()
             print_comics_list(comics)
@@ -312,8 +311,6 @@ def show_all_comics():
             print("Going back...")
         else:
             print("Please enter a valid option.")
-
-
 
 def main():
     database.create_tables()
