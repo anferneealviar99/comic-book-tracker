@@ -1,5 +1,5 @@
 class Trade:
-    def __init__(self, name, publisher, issues, writers, pencillers, inkers, colorists, letterers, editors):
+    def __init__(self, name, publisher, issues, writers, pencillers, inkers, colorists, letterers, editors=""):
         self.name = name
         self.publisher = publisher
         self.issues = issues
@@ -11,8 +11,8 @@ class Trade:
         self.editors = editors
     
 class ComicBookIssue:
-    def __init__(self, name, number, publisher, writer, penciller, inker, colorist, letterer, editor):
-        self.series_name = name 
+    def __init__(self, name, number, publisher, writer, penciller, inker, colorist, letterer, editor=""):
+        self.series = name 
         self.number = number
         self.publisher = publisher
         self.writer = writer
