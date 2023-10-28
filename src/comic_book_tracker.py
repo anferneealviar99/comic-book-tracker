@@ -246,8 +246,12 @@ def add_comic_issue(title, publisher):
 
             issue_entry = ComicBookIssue(series_name, volume, number, publisher, writer, penciller, inker, colorist, letterer, editor)
 
-            database.add_comic(issue_entry)
-            print(f'{title} was added to your list!')
+            if database.find_comic(issue_entry) is None:
+                database.add_comic(issue_entry)
+                print(f'{title} was added to your list!')
+            else:
+                print(f'{title} already exists in your list.')
+            
 
     except InvalidComicIssueException:
         print("Comic issue was not found")

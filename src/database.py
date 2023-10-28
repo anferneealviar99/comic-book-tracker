@@ -29,11 +29,22 @@ CREATE_TRADES_TABLE = """CREATE TABLE IF NOT EXISTS trades (
     editors TEXT
 )"""
 
+CREATE_COMPLETED_TRADES_TABLE = """"""
+CREATE_COMPLETED_COMICS = """CREATE TABLE IF NOT EXISTS completed_comics (
+    id INTEGER PRIMARY KEY,
+    series TEXT,
+    publisher TEXT,
+    issues TEXT,
+    writers TEXT
+)"""
+
 INSERT_COMIC = """INSERT INTO comics (series, volume, number, publisher, writer, penciller, inker, colorist, letterer, editor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
 INSERT_TRADE =  """INSERT INTO trades (title, publisher, issues, writers, pencillers, inkers, colorists, letterers, editors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
 ADD_TRADE_ID = "UPDATE comics SET trade_id = ? WHERE series = ? AND volume = ? AND number = ?"
+
+FIND_COMIC_ISSUE = """SELECT id FROM comics WHERE series = ? AND volume = ? AND number = ?"""
 
 SELECT_ALL_COMICS = "SELECT * FROM comics"
 
@@ -58,6 +69,11 @@ def add_trade(trade):
                                   trade.colorists, trade.letterers, trade.editors))
         return cursor.lastrowid
     
+def find_comic(comic):
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(FIND_COMIC_ISSUE, (comic.series, comic.volume, comic.number))
+        return cursor.fetchone()
         
 def add_trade_id(trade_id, comics):
     with connection:
