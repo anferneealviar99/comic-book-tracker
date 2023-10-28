@@ -1,5 +1,5 @@
 class ComicBookIssue:
-    def __init__(self, name, volume, number, publisher, writer="", penciller="", inker="", colorist="", letterer="", editor=""):
+    def __init__(self, name, volume, number, publisher, writer="", penciller="", inker="", colorist="", letterer="", editor="", trade_id=0):
         self.series = name 
         self.volume = volume
         self.number = number

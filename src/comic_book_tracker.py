@@ -46,6 +46,19 @@ def search_credits(credits, role):
             if role.capitalize() == role_entry.name:
                 return credit.creator
     
+def get_issue_components (issue_string):
+    issue_components = issue_string.split("#")
+    series_num = issue_components[1].strip()
+
+    if "(" in issue_components[0]:
+        series_name_year = issue_components[0].split("(")
+        series_name = series_name_year[0].strip()
+        year = series_name_year[1].strip(")")
+        return [series_name, year, series_num]
+    else:
+        series_name = issue_components[0]
+        return [series_name, series_num]
+
 def find_issues_in_range(issue):
     issue_comp = issue.split("#")
     issue_range = issue_comp[1].split('-')
@@ -59,13 +72,28 @@ def find_issues_in_range(issue):
     return all_issues 
 
 def search_issue_range(issues_set, issue_details_list):
-    pass 
+    search_criteria = get_issue_components(issues_set[0])
+
+    issues_list = mokkari_api.issues_list(
+        {
+            'series_name': search_criteria[0],
+            'issue_number': search_criteria[2],
+            'year_began': search_criteria[1]
+        }
+    )
+
+    issues_set = set(issues_set)
+
+    for issue in issues_list:
+        if issue.issue_name in issues_set:
+            found_issue = mokkari_api.issue(issue.id)
+            issue_details_list.append(found_issue)
 
 def search_issues(issues_list, issue_details_list, publisher):
     for issue in issues_list:
         if '-' in issue:
             issues_set = find_issues_in_range(issue)
-            issue_details = search_issues(issues_set, issue_details_list, publisher)
+            search_issue_range(issues_set, issue_details_list)
         else:
             issue_details = search_issue(issue, publisher)
             issue_details_list.append(issue_details)
@@ -88,11 +116,14 @@ def add_graphic_novel():
     letterers = []
     editors = []
 
+    comic_issues = []
 
     for issue in issue_details_list:
         issue_series = issue.series.name
         issue_volume = issue.series.volume
         issue_number = issue.number
+    
+
         publisher = issue.publisher.name
 
         credits = issue.credits
@@ -147,6 +178,8 @@ def add_graphic_novel():
                                       letterer, 
                                       editor)
         
+        comic_issues.append(single_issue)
+        
         database.add_comic(single_issue)
 
     all_issues = ", ".join(issues_list)
@@ -180,7 +213,9 @@ def add_graphic_novel():
     trade = Trade(title, publisher, all_issues, all_writers, all_pencillers,
                   all_inkers, all_colorists, all_letterers, all_editors)
     
-    database.add_trade(trade)
+    trade_id = database.add_trade(trade)
+
+    database.add_trade_id(trade_id, comic_issues)
 
     print(f"{title} has been added to your list!")
 
@@ -198,7 +233,13 @@ def add_comic_issue(title, publisher):
             credits = issue_details.credits
             writer = search_credits(credits, "writer")
             penciller = search_credits(credits, "penciller")
+            if penciller is None:
+                penciller = search_credits(credits, "artist")
+            
             inker = search_credits(credits, "inker")
+            if inker is None:
+                inker = search_credits(credits, "artist")
+
             colorist = search_credits(credits, "colorist")
             letterer = search_credits(credits, "letterer")
             editor = search_credits(credits, "editor")
@@ -250,8 +291,8 @@ def print_trades_list(trades):
         trade_name = trade[1]
         trade_issues = trade[3]
 
-        writers = trade[5]
-        pencillers = trade[6]
+        writers = trade[4]
+        pencillers = trade[5]
             
         print(f'{trade_name}, consisting of {trade_issues} by {writers} and {pencillers}')
 
