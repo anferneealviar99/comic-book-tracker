@@ -12,6 +12,7 @@ CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
     colorist TEXT,
     letterer TEXT,
     editor TEXT,
+    trade_id INTEGER,
     FOREIGN KEY (trade_id) REFERENCES trades(id)
 )"""
 
@@ -42,8 +43,8 @@ connection = sqlite3.connect("comics.db")
 
 def create_tables():
     with connection:
-        connection.execute(CREATE_COMICS_TABLE)
         connection.execute(CREATE_TRADES_TABLE)
+        connection.execute(CREATE_COMICS_TABLE)
 
 def add_comic(comic):
     with connection:
