@@ -85,9 +85,10 @@ def add_graphic_novel():
     letterers = []
     editors = []
 
+
     for issue in issue_details_list:
         issue_series = issue.series.name
-        year_began = issue.series.year_began
+        issue_volume = issue.series.volume
         issue_number = issue.number
         publisher = issue.publisher.name
 
