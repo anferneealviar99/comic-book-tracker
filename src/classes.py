@@ -20,4 +20,9 @@ class ComicBookIssue:
         self.letterer = letterer
         self.editor = editor 
 
+class InvalidComicIssueException(Exception):
+    # Raised when issue details retrieved from Metron is None
+    pass
+
+
 #TODO change classes 

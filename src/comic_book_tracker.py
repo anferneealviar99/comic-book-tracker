@@ -1,7 +1,7 @@
 import mokkari, os, database
 from dotenv import load_dotenv
 from user_interface import main_menu, add_comic_menu
-from classes import ComicBookIssue
+from classes import ComicBookIssue, Trade, InvalidComicIssueException
 
 load_dotenv('key.env')
 mokkari_user = os.getenv('MOKKARI_USERNAME')
@@ -135,23 +135,32 @@ def add_graphic_novel():
     all_editors = ",".join(editors)
 
 def add_comic_issue(title):
-    issue_details = search_issue(title)
+    try:
+        issue_details = search_issue(title)
 
-    publisher = issue_details.publisher.name
+        if issue_details is None:
+            raise InvalidComicIssueException
+        else:
+            publisher = issue_details.publisher.name
+            series_name = issue_details.series.name
+            number = issue_details.number
+            credits = issue_details.credits
+            writer = search_credits(credits, "writer")
+            penciller = search_credits(credits, "penciller")
+            inker = search_credits(credits, "inker")
+            colorist = search_credits(credits, "colorist")
+            letterer = search_credits(credits, "letterer")
+            editor = search_credits(credits, "editor")
 
-    series_name = issue_details.series.name
-    number = issue_details.number
-    credits = issue_details.credits
-    writer = search_credits(credits, "writer")
-    penciller = search_credits(credits, "penciller")
-    inker = search_credits(credits, "inker")
-    colorist = search_credits(credits, "colorist")
-    letterer = search_credits(credits, "letterer")
-    editor = search_credits(credits, "editor")
+            issue_entry = ComicBookIssue(series_name, number, publisher, writer, penciller, inker, colorist, letterer, editor)
 
-    issue_entry = ComicBookIssue(series_name, number, publisher, writer, penciller, inker, colorist, letterer, editor)
+            database.add_comic(issue_entry)
 
-    database.add_comic(issue_entry)
+    except InvalidComicIssueException:
+        print("Comic issue was not found")
+
+
+    
 
 def add_new_comic():
     menuOption = 0
