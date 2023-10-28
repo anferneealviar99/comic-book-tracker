@@ -61,7 +61,7 @@ def add_trade(trade):
 def add_trade_id(trade_id, comics):
     with connection:
         for comic in comics:
-            connection.execute(ADD_TRADE_ID, trade_id, comic.series, comic.volume, comic.number)
+            connection.execute(ADD_TRADE_ID, (trade_id, comic.series, comic.volume, comic.number))
 
 def get_comics():
     with connection:
