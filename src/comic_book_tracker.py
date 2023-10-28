@@ -109,6 +109,9 @@ def add_graphic_novel():
 
         inker = search_credits(credits, "inker")
 
+        if inker is None:
+            inker = search_credits(credits, "artist")
+
         if inker not in inkers:
             inkers.append(inker)
 
@@ -143,9 +146,7 @@ def add_graphic_novel():
     all_issues = ", ".join(issues_list)
     all_writers = ", ".join(writers)
 
-    if None in pencillers:
-        all_pencillers = ""
-    else:
+    if not None in pencillers:
         all_pencillers = ", ".join(pencillers)
     
     if None in inkers:
@@ -172,6 +173,8 @@ def add_graphic_novel():
                   all_inkers, all_colorists, all_letterers, all_editors)
     
     database.add_trade(trade)
+
+    print(f"{title} has been added to your list!")
 
 def add_comic_issue(title, publisher):
     try:
