@@ -1,7 +1,9 @@
 import sqlite3
 
 CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
-    title TEXT,
+    id INTEGER PRIMARY KEY
+    series TEXT,
+    number INTEGER,
     publisher TEXT,
     writer TEXT,
     penciller TEXT,

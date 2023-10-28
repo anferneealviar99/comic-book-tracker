@@ -33,7 +33,6 @@ def search_issue(title):
             issue_details = mokkari_api.issue(issue.id)
             return issue_details
 
-
 def search_credits(credits, role):
     for credit in credits:
         roles = credit.role
@@ -64,7 +63,6 @@ def search_issues(issues_list, issue_details_list):
             issue_details_list.append(issue_details)
 
 def add_graphic_novel():
-    # Manually enter each field, Metron doesn't have our desired thing atm
     title = input("Enter the name of the graphic novel: ")
     
     issues_list = input("Please enter all issues associated with this graphic novel/trade paperback: ").split(",")
@@ -82,6 +80,9 @@ def add_graphic_novel():
     editors = []
 
     for issue in issue_details_list:
+        issue_series = issue.series.name
+        issue_number = issue.number
+
         credits = issue.credits
 
         writer = search_credits(credits, "writer")
@@ -114,6 +115,17 @@ def add_graphic_novel():
         if editor not in editors:
             editors.append(editor)
 
+        single_issue = ComicBookIssue(issue_series, 
+                                      issue_number, 
+                                      publisher,
+                                      writer,
+                                      inker,
+                                      colorist,
+                                      letterer, 
+                                      editor)
+        
+        database.add_comic(single_issue)
+
     all_issues = ",".join(issues_list)
     all_writers = ",".join(writers)
     all_pencillers = ",".join(pencillers)
@@ -122,14 +134,13 @@ def add_graphic_novel():
     all_letterers = ",".join(letterers)
     all_editors = ",".join(editors)
 
-
-
-
 def add_comic_issue(title):
     issue_details = search_issue(title)
 
     publisher = issue_details.publisher.name
 
+    series_name = issue_details.series.name
+    number = issue_details.number
     credits = issue_details.credits
     writer = search_credits(credits, "writer")
     penciller = search_credits(credits, "penciller")
@@ -138,10 +149,9 @@ def add_comic_issue(title):
     letterer = search_credits(credits, "letterer")
     editor = search_credits(credits, "editor")
 
-    issue_entry = ComicBookIssue(title, publisher, writer, penciller, inker, colorist, letterer, editor)
+    issue_entry = ComicBookIssue(series_name, number, publisher, writer, penciller, inker, colorist, letterer, editor)
 
     database.add_comic(issue_entry)
-
 
 def add_new_comic():
     menuOption = 0
