@@ -54,19 +54,14 @@ def find_issues_in_range(issue):
 
     return all_issues 
 
-def search_issues(issues_list):
-    issue_details_list = []
+def search_issues(issues_list, issue_details_list):
     for issue in issues_list:
         if '-' in issue:
             issues_string = find_issues_in_range(issue)
-            for title in issues_string:
-                issue_details = search_issue(title)
-                issue_details_list.append(issue_details)
+            issue_details = search_issues(issues_string)
         else:
-            issue_details = search_issue(title)
-            issue_details_list.append(issue)
-
-    return issue_details_list
+            issue_details = search_issue(issue)
+            issue_details_list.append(issue_details)
 
 def add_graphic_novel():
     # Manually enter each field, Metron doesn't have our desired thing atm
@@ -74,7 +69,9 @@ def add_graphic_novel():
     
     issues_list = input("Please enter all issues associated with this graphic novel/trade paperback: ").split(",")
 
-    issue_details_list = search_issues(issues_list)
+    issue_details_list = []
+
+    search_issues(issues_list, issue_details_list)
 
     publisher = issue_details_list[0].publisher.name
     writers = []
