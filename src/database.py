@@ -14,6 +14,7 @@ CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
 )"""
 
 CREATE_TRADES_TABLE = """CREATE TABLE IF NOT EXISTS trades (
+    id INTEGER PRIMARY KEY,
     title TEXT,
     publisher TEXT,
     issues TEXT,
