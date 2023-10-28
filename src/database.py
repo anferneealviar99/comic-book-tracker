@@ -8,9 +8,9 @@ CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
     publisher TEXT,
     writer TEXT,
     penciller TEXT,
-    letterer TEXT,
-    colorist TEXT,
     inker TEXT,
+    colorist TEXT,
+    letterer TEXT,
     editor TEXT
 )"""
 
@@ -21,15 +21,15 @@ CREATE_TRADES_TABLE = """CREATE TABLE IF NOT EXISTS trades (
     issues TEXT,
     writers TEXT,
     pencillers TEXT,
-    letterers TEXT,
-    colorists TEXT,
     inkers TEXT,
+    colorists TEXT,
+    letterers TEXT,
     editors TEXT
 )"""
 
-INSERT_COMIC = """INSERT INTO comics (series, volume, number, publisher, writer, penciller, letterer, colorist, inker, editor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+INSERT_COMIC = """INSERT INTO comics (series, volume, number, publisher, writer, penciller, inker, colorist, letterer, editor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
-INSERT_TRADE =  """INSERT INTO trades (title, publisher, issues, writers, pencillers, letterers, colorists, inkers, editors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+INSERT_TRADE =  """INSERT INTO trades (title, publisher, issues, writers, pencillers, inkers, colorists, letterers, editors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
 SELECT_ALL_COMICS = "SELECT * FROM comics"
 
@@ -42,7 +42,7 @@ def create_tables():
 
 def add_comic(comic):
     with connection:
-        connection.execute(INSERT_COMIC, (comic.series, comic.volume, comic.number, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.letterer, comic.editor))
+        connection.execute(INSERT_COMIC, (comic.series, comic.volume, comic.number, comic.publisher, comic.writer, comic.penciller, comic.inker, comic.colorist, comic.letterer, comic.editor))
 
 def add_trade(trade):
     with connection:
@@ -54,3 +54,4 @@ def get_comics():
         cursor = connection.cursor()
         cursor.execute(SELECT_ALL_COMICS)
         return cursor.fetchall()
+

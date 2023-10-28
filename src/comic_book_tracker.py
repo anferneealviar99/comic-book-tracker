@@ -132,6 +132,7 @@ def add_graphic_novel():
                                       issue_number, 
                                       publisher,
                                       writer,
+                                      penciller,
                                       inker,
                                       colorist,
                                       letterer, 
@@ -141,13 +142,33 @@ def add_graphic_novel():
 
     all_issues = ", ".join(issues_list)
     all_writers = ", ".join(writers)
-    all_pencillers = ", ".join(pencillers)
-    all_inkers = ", ".join(inkers)
-    all_colorists  = ", ".join(colorists)
-    all_letterers = ", ".join(letterers)
-    all_editors = ", ".join(editors)
 
-    trade = Trade(title, all_issues, all_writers, all_pencillers,
+    if None in pencillers:
+        all_pencillers = ""
+    else:
+        all_pencillers = ", ".join(pencillers)
+    
+    if None in inkers:
+        all_inkers = ""
+    else:
+        all_inkers = ", ".join(inkers)
+
+    if None in colorists:
+        all_colorists=""
+    else:
+        all_colorists = ", ".join(colorists)
+
+    if None in letterers:
+        all_letterers = ""
+    else:
+        all_letterers = ", ".join(letterers)
+
+    if None in editors:
+        all_editors=""
+    else:
+        all_editors = ", ".join(editors)
+
+    trade = Trade(title, publisher, all_issues, all_writers, all_pencillers,
                   all_inkers, all_colorists, all_letterers, all_editors)
     
     database.add_trade(trade)
