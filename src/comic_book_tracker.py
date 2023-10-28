@@ -134,6 +134,11 @@ def add_graphic_novel():
     all_letterers = ",".join(letterers)
     all_editors = ",".join(editors)
 
+    trade = Trade(title, all_issues, all_writers, all_pencillers,
+                  all_inkers, all_colorists, all_letterers, all_editors)
+    
+    database.add_trade(trade)
+
 def add_comic_issue(title):
     try:
         issue_details = search_issue(title)
@@ -158,9 +163,6 @@ def add_comic_issue(title):
 
     except InvalidComicIssueException:
         print("Comic issue was not found")
-
-
-    
 
 def add_new_comic():
     menuOption = 0
@@ -199,9 +201,4 @@ def main():
         else:
             print("Please enter a valid option.")
 
-    
 
-main()
-
-#TODO separate menus into a file UserInterface.py
-#TODO enter inputs which coincide with the Mokkari API - maybe? ComicVine API might be better honestly
