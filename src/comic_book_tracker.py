@@ -1,7 +1,5 @@
 import mokkari, os, database
 from dotenv import load_dotenv
-from simyan.comicvine import Comicvine
-from simyan.sqlite_cache import SQLiteCache
 from user_interface import main_menu, add_comic_menu
 from classes import ComicBookIssue
 
