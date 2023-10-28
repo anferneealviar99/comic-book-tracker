@@ -1,7 +1,7 @@
 import sqlite3
 
 CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
-    id INTEGER PRIMARY KEY
+    id INTEGER PRIMARY KEY,
     series TEXT,
     number INTEGER,
     publisher TEXT,
@@ -41,7 +41,7 @@ def create_tables():
 
 def add_comic(comic):
     with connection:
-        connection.execute(INSERT_COMIC, (comic.name, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.letterer, comic.editor))
+        connection.execute(INSERT_COMIC, (comic.series, comic.number, comic.publisher, comic.writer, comic.penciller, comic.letterer, comic.colorist, comic.letterer, comic.editor))
 
 def add_trade(trade):
     with connection:
