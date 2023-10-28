@@ -29,3 +29,15 @@ def add_comic_menu():
     user_input = input(menu)
 
     return user_input
+
+def show_all_comics_menu():
+    menu = """Would you like to see your single issue list, or your trade list?
+    1) Single Comics List
+    2) Trades List
+    3) Back
+    
+    Your selection: """
+
+    user_input = input(menu)
+
+    return user_input 

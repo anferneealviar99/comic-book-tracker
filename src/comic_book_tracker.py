@@ -1,6 +1,6 @@
 import mokkari, os, database
 from dotenv import load_dotenv
-from user_interface import main_menu, add_comic_menu
+from user_interface import main_menu, add_comic_menu, show_all_comics_menu
 from classes import ComicBookIssue, Trade, InvalidComicIssueException
 
 load_dotenv('key.env')
@@ -61,8 +61,8 @@ def find_issues_in_range(issue):
 def search_issues(issues_list, issue_details_list, publisher):
     for issue in issues_list:
         if '-' in issue:
-            issues_string = find_issues_in_range(issue)
-            issue_details = search_issues(issues_string, issue_details_list, publisher)
+            issues_set = find_issues_in_range(issue)
+            issue_details = search_issues(issues_set, issue_details_list, publisher)
         else:
             issue_details = search_issue(issue, publisher)
             issue_details_list.append(issue_details)
@@ -151,6 +151,8 @@ def add_graphic_novel():
 
     if not None in pencillers:
         all_pencillers = ", ".join(pencillers)
+    else:
+        all_pencillers = ""
     
     if None in inkers:
         all_inkers = ""
@@ -188,6 +190,7 @@ def add_comic_issue(title, publisher):
         else:
             publisher = issue_details.publisher.name
             series_name = issue_details.series.name
+            volume = issue_details.series.volume
             number = issue_details.number
             credits = issue_details.credits
             writer = search_credits(credits, "writer")
@@ -197,9 +200,10 @@ def add_comic_issue(title, publisher):
             letterer = search_credits(credits, "letterer")
             editor = search_credits(credits, "editor")
 
-            issue_entry = ComicBookIssue(series_name, number, publisher, writer, penciller, inker, colorist, letterer, editor)
+            issue_entry = ComicBookIssue(series_name, volume, number, publisher, writer, penciller, inker, colorist, letterer, editor)
 
             database.add_comic(issue_entry)
+            print(f'{title} was added to your list!')
 
     except InvalidComicIssueException:
         print("Comic issue was not found")
@@ -221,6 +225,42 @@ def add_new_comic():
             print("Going back...")
 
 
+def print_comics_list(comics):
+    print("-----ALL COMICS-------")
+
+    for comic in comics:
+        series_name = comic[1]
+        series_volume = comic[2]
+        issue_number = comic[3]
+
+        writer = comic[4]
+        penciller = comic[5]
+
+        print(f'{series_name} Vol. {series_volume} #{issue_number}, by {writer} and {penciller}')
+
+
+
+def print_trades_list(trades):
+    pass
+
+def show_all_comics():
+    menuOption = 0
+
+    while menuOption != '3':
+        menuOption = show_all_comics_menu()
+
+        if menuOption == '1':
+            comics = database.get_comics()
+            print_comics_list(comics)
+        elif menuOption == '2':
+            trades = database.get_trades() #TODO
+        elif menuOption == '3':
+            print("Going back...")
+        else:
+            print("Please enter a valid option.")
+
+
+
 def main():
     database.create_tables()
 
@@ -233,6 +273,7 @@ def main():
             add_new_comic() 
         elif int(menuOption) == 2:
             print("UPCOMING COMICS")
+
         elif int(menuOption) == 3:
             print("YOUR CURRENT COMICS")
         elif int(menuOption) == 4:

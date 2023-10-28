@@ -33,6 +33,8 @@ INSERT_TRADE =  """INSERT INTO trades (title, publisher, issues, writers, pencil
 
 SELECT_ALL_COMICS = "SELECT * FROM comics"
 
+SELECT_ALL_TRADES = "SELECT * FROM trades"
+
 connection = sqlite3.connect("comics.db")
 
 def create_tables():
@@ -54,4 +56,10 @@ def get_comics():
         cursor = connection.cursor()
         cursor.execute(SELECT_ALL_COMICS)
         return cursor.fetchall()
+    
+def get_trades():
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(SELECT_ALL_TRADES)
+        return cursor.fetchall
 
