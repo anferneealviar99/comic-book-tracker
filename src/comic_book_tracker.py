@@ -53,11 +53,93 @@ def search_credits(credits, role):
             if role.capitalize() == role_entry.name:
                 return credit.creator
     
+def find_issues_in_range(issue):
+    issue_comp = issue.split("#")
+    issue_range = issue_comp[1].split('-')
+    series_name = issue_comp[0]
 
+    all_issues = []
+    for i in range(issue_range[0], issue_range[1] + 1, 1):
+        issue_string = f'{series_name} #{i}'
+        all_issues.append(issue_string)
 
-def add_comic_issue():
-    title = input("Enter the name of the comic book issue: ")
+    return all_issues 
+
+def search_issues(issues_list):
+    issue_details_list = []
+    for issue in issues_list:
+        if '-' in issue:
+            issues_string = find_issues_in_range(issue)
+            for title in issues_string:
+                issue_details = search_issue(title)
+                issue_details_list.append(issue_details)
+        else:
+            issue_details = search_issue(title)
+            issue_details_list.append(issue)
+
+    return issue_details_list
+
+def add_graphic_novel():
+    # Manually enter each field, Metron doesn't have our desired thing atm
+    title = input("Enter the name of the graphic novel: ")
     
+    issues_list = input("Please enter all issues associated with this graphic novel/trade paperback: ").split(",")
+
+    issue_details_list = search_issues(issues_list)
+
+    publisher = issue_details_list[0].publisher.name
+    writers = []
+    pencillers = []
+    inkers = []
+    colorists = []
+    letterers = []
+    editors = []
+
+    for issue in issue_details_list:
+        credits = issue.credits
+
+        writer = search_credits(credits, "writer")
+        
+        if writer not in writers:
+            writers.append(writer)
+
+        penciller = search_credits(credits, "penciller")
+
+        if penciller not in pencillers:
+            pencillers.append(penciller)
+
+        inker = search_credits(credits, "inker")
+
+        if inker not in inkers:
+            inkers.append(inker)
+
+        colorist = search_credits(credits, "colorist")
+
+        if colorist not in colorists:
+            colorists.append(colorist)
+
+        letterer = search_credits(credits, "letterer")
+
+        if letterer not in letterers:
+            letterers.append(letterer)
+
+        editor = search_credits(credits, "editor")
+
+        if editor not in editors:
+            editors.append(editor)
+
+    all_issues = ",".join(issues_list)
+    all_writers = ",".join(writers)
+    all_pencillers = ",".join(pencillers)
+    all_inkers = ",".join(inkers)
+    all_colorists  = ",".join(colorists)
+    all_letterers = ",".join(letterers)
+    all_editors = ",".join(editors)
+
+
+
+
+def add_comic_issue(title):
     issue_details = search_issue(title)
 
     publisher = issue_details.publisher.name
@@ -82,7 +164,8 @@ def add_new_comic():
 
     if int(menuOption) == 1:
         print("Adding a comic book issue...")
-        add_comic_issue()
+        title = input("Enter the name of the comic book issue: ")
+        add_comic_issue(title)
     elif int(menuOption) == 2:
         print("Adding collected editions...")
     elif int(menuOption) == 3:

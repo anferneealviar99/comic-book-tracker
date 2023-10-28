@@ -1,11 +1,4 @@
-class TrackerEntry:
-    def __init__(self, comicBookDetails, status, rating=None, review=None):
-        self.comicBookDetails = comicBookDetails
-        self.status = status 
-        self.rating = rating 
-        self.review = review  
-
-class GraphicNovel:
+class Trade:
     def __init__(self, name, issues, writers, pencillers, inkers, colorists, letterers, editors):
         self.name = name
         self.issues = issues
@@ -16,8 +9,9 @@ class GraphicNovel:
         self.letterers = letterers 
     
 class ComicBookIssue:
-    def __init__(self, name, publisher, writer, penciller, inker, colorist, letterer, editor):
-        self.name = name 
+    def __init__(self, name, number, publisher, writer, penciller, inker, colorist, letterer, editor):
+        self.series_name = name 
+        self.number = number
         self.publisher = publisher
         self.writer = writer
         self.penciller = penciller 

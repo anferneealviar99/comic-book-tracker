@@ -11,6 +11,18 @@ CREATE_COMICS_TABLE = """CREATE TABLE IF NOT EXISTS comics (
     editor TEXT
 )"""
 
+CREATE_TRADES_TABLE = """CREATE TABLE IF NOT EXISTS trades (
+    title TEXT,
+    publisher TEXT,
+    issues TEXT,
+    writers TEXT,
+    pencillers TEXT,
+    letterers TEXT,
+    colorists TEXT,
+    inkers TEXT,
+    editors TEXT
+)"""
+
 CREATE_READING_LIST_TABLE = """CREATE TABLE IF NOT EXISTS read (
     reader TEXT,
     title TEXT,
