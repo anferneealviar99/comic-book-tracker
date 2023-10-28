@@ -177,18 +177,18 @@ def add_comic_issue(title, publisher):
 def add_new_comic():
     menuOption = 0
 
-    menuOption = add_comic_menu()
-
-    if int(menuOption) == 1:
-        print("Adding a comic book issue...")
-        title = input("Enter the name of the comic book issue: ")
-        publisher = input("Enter the name of the publisher: ")
-        add_comic_issue(title, publisher)
-    elif int(menuOption) == 2:
-        print("Adding collected editions...")
-        add_graphic_novel()
-    elif int(menuOption) == 3:
-        print("Going back...")
+    while (int(menuOption) != 3):
+        menuOption = add_comic_menu()
+        if int(menuOption) == 1:
+            print("Adding a comic book issue...")
+            title = input("Enter the name of the comic book issue: ")
+            publisher = input("Enter the name of the publisher: ")
+            add_comic_issue(title, publisher)
+        elif int(menuOption) == 2:
+            print("Adding collected editions...")
+            add_graphic_novel()
+        elif int(menuOption) == 3:
+            print("Going back...")
 
 
 def main():
