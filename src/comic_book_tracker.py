@@ -125,7 +125,7 @@ def add_graphic_novel():
             editors.append(editor)
 
         single_issue = ComicBookIssue(issue_series, 
-                                      year_began,
+                                      issue_volume,
                                       issue_number, 
                                       publisher,
                                       writer,
