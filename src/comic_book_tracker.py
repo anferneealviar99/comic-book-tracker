@@ -58,6 +58,9 @@ def find_issues_in_range(issue):
     
     return all_issues 
 
+def search_issue_range(issues_set, issue_details_list):
+    pass 
+
 def search_issues(issues_list, issue_details_list, publisher):
     for issue in issues_list:
         if '-' in issue:
@@ -233,15 +236,24 @@ def print_comics_list(comics):
         series_volume = comic[2]
         issue_number = comic[3]
 
-        writer = comic[4]
-        penciller = comic[5]
+        writer = comic[5]
+        penciller = comic[6]
 
         print(f'{series_name} Vol. {series_volume} #{issue_number}, by {writer} and {penciller}')
 
 
 
 def print_trades_list(trades):
-    pass
+    print("-----ALL TRADES-----")
+    
+    for trade in trades:
+        trade_name = trade[1]
+        trade_issues = trade[3]
+
+        writers = trade[5]
+        pencillers = trade[6]
+            
+        print(f'{trade_name}, consisting of {trade_issues} by {writers} and {pencillers}')
 
 def show_all_comics():
     menuOption = 0
@@ -253,7 +265,8 @@ def show_all_comics():
             comics = database.get_comics()
             print_comics_list(comics)
         elif menuOption == '2':
-            trades = database.get_trades() #TODO
+            trades = database.get_trades() 
+            print_trades_list(trades)
         elif menuOption == '3':
             print("Going back...")
         else:
@@ -275,7 +288,7 @@ def main():
             print("UPCOMING COMICS")
 
         elif int(menuOption) == 3:
-            print("YOUR CURRENT COMICS")
+            show_all_comics()
         elif int(menuOption) == 4:
             print("YOUR COMPLETED COMICS")
         elif int(menuOption) == 5:
