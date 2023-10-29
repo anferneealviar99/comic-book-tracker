@@ -23,8 +23,6 @@ class Trade:
         self.letterers = letterers 
         self.editors = editors
     
-
-
 class InvalidComicIssueException(Exception):
     # Raised when issue details retrieved from Metron is None
     pass

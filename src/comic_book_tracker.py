@@ -179,8 +179,10 @@ def add_graphic_novel():
                                       editor)
         
         comic_issues.append(single_issue)
-        
-        database.add_comic(single_issue)
+        if database.find_comic(single_issue) is None:
+            database.add_comic(single_issue)
+        else:
+            print(f'{title} already exists in your list.')
 
     all_issues = ", ".join(issues_list)
     all_writers = ", ".join(writers)
