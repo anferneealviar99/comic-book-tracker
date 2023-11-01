@@ -30,8 +30,13 @@ def search_issue(title, publisher):
     })
 
     issue_obj = [issue for issue in issues if issue.issue_name == title]
-    
-    return mokkari_api.issue(issue_obj[0].id)
+
+    print(issue_obj)
+
+    if len(issue_obj) > 0:
+        return mokkari_api.issue(issue_obj[0].id) 
+    else:
+        return None
 
     # for issue in issues:
     #     if title in issue.issue_name:
@@ -39,12 +44,15 @@ def search_issue(title, publisher):
     #         return issue_details
 
 def search_credits(credits, role):
+    creators = []
     for credit in credits:
         roles = credit.role
 
         for role_entry in roles:
             if role.capitalize() == role_entry.name:
-                return credit.creator
+                creators.append(credit.creator)
+
+    return ", ".join(str(creator) for creator in creators)
     
 def get_issue_components (issue_string):
     issue_components = issue_string.split("#")
@@ -65,6 +73,7 @@ def find_issues_in_range(issue):
     series_name = issue_comp[0].strip()
 
     all_issues = []
+    print(issue_range)
     for i in range(int(issue_range[0]), int(issue_range[1]) + 1, 1):
         issue_string = f'{series_name} #{i}'
         all_issues.append(issue_string)
@@ -91,7 +100,9 @@ def search_issue_range(issues_set, issue_details_list):
 
 def search_issues(issues_list, issue_details_list, publisher):
     for issue in issues_list:
-        if '-' in issue:
+
+        issue_num = issue.split("#")[1]
+        if '-' in issue_num:
             issues_set = find_issues_in_range(issue)
             search_issue_range(issues_set, issue_details_list)
         else:
@@ -102,6 +113,8 @@ def add_graphic_novel():
     title = input("Enter the name of the graphic novel: ")
     
     issues_list = input("Please enter all issues associated with this graphic novel/trade paperback: ").split(",")
+
+    issues_list = [issues.strip() for issues in issues_list]
 
     publisher = input("Please enter the name of the publisher: ")
     
@@ -119,73 +132,83 @@ def add_graphic_novel():
     comic_issues = []
 
     for issue in issue_details_list:
-        issue_series = issue.series.name
-        issue_volume = issue.series.volume
-        issue_number = issue.number
-    
-
-        publisher = issue.publisher.name
-
-        credits = issue.credits
-
-        writer = search_credits(credits, "writer")
-
-        if writer is None:
-            writer = search_credits(credits, "plot")
         
-        if writer not in writers:
-            writers.append(writer)
-
-        penciller = search_credits(credits, "penciller")
-
-        if penciller is None:
-            penciller = search_credits(credits, "artist")
-
-        if penciller not in pencillers:
-            pencillers.append(penciller)
-
-        inker = search_credits(credits, "inker")
-
-        if inker is None:
-            inker = search_credits(credits, "artist")
-
-        if inker not in inkers:
-            inkers.append(inker)
-
-        colorist = search_credits(credits, "colorist")
-
-        if colorist not in colorists:
-            colorists.append(colorist)
-
-        letterer = search_credits(credits, "letterer")
-
-        if letterer not in letterers:
-            letterers.append(letterer)
-
-        editor = search_credits(credits, "editor")
-
-        if editor not in editors:
-            editors.append(editor)
-
-        single_issue = ComicBookIssue(issue_series, 
-                                      issue_volume,
-                                      issue_number, 
-                                      publisher,
-                                      writer,
-                                      penciller,
-                                      inker,
-                                      colorist,
-                                      letterer, 
-                                      editor)
-        
-        comic_issues.append(single_issue)
-        if database.find_comic(single_issue) is None:
-            database.add_comic(single_issue)
+        if issue is None:
+            pass
         else:
-            print(f'{title} already exists in your list.')
+            issue_series = issue.series.name
+            issue_volume = issue.series.volume
+            issue_number = issue.number
+            print(issue.series.name, issue.series.volume, issue.number)
+            publisher = issue.publisher.name
+
+            credits = issue.credits
+
+            writer = search_credits(credits, "writer")
+
+            if writer is None:
+                writer = search_credits(credits, "plot")
+                writer = search_credits(credits, "story")
+                print(writer)
+            
+            if writer not in writers:
+                writers.append(writer)
+
+            penciller = search_credits(credits, "penciller")
+
+            if penciller is None:
+                penciller = search_credits(credits, "artist")
+
+            if penciller not in pencillers:
+                pencillers.append(penciller)
+
+            inker = search_credits(credits, "inker")
+
+            if inker is None:
+                inker = search_credits(credits, "artist")
+
+            if inker not in inkers:
+                inkers.append(inker)
+
+            colorist = search_credits(credits, "colorist")
+
+            if colorist not in colorists:
+                colorists.append(colorist)
+
+            letterer = search_credits(credits, "letterer")
+
+            if letterer not in letterers:
+                letterers.append(letterer)
+
+            editor = search_credits(credits, "editor")
+
+            if editor not in editors:
+                editors.append(editor)
+
+            single_issue = ComicBookIssue(issue_series, 
+                                        issue_volume,
+                                        issue_number, 
+                                        publisher,
+                                        writer,
+                                        penciller,
+                                        inker,
+                                        colorist,
+                                        letterer, 
+                                        editor)
+            
+            comic_issues.append(single_issue)
+
+            if database.find_comic(single_issue) is None:
+                database.add_comic(single_issue)
+            else:
+                print(f'{issue_series} Vol. {issue_volume} #{issue_number}  already exists in your list. Skipping this entry.')
 
     all_issues = ", ".join(issues_list)
-    all_writers = ", ".join(writers)
+    
+    if not None in writers:
+        all_writers = ", ".join(writers)
+    else:
+        all_writers = ""
 
     if not None in pencillers:
         all_pencillers = ", ".join(pencillers)
