@@ -152,7 +152,8 @@ def add_graphic_novel():
             writer_result = search_credits(credits, ["writer", "plot", "story"])
             print(writer_result)
 
-            writers.extend([writer.strip() for writer in writer_result.split(",") if writer not in writers])
+            if writer_result not in writers:
+                writers.extend(writer_result.split(","))
 
             penciller = search_credits(credits, ["penciller", "artist"])
 
