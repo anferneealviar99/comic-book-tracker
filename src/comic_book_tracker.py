@@ -43,16 +43,21 @@ def search_issue(title, publisher):
     #         issue_details = mokkari_api.issue(issue.id)
     #         return issue_details
 
-def search_credits(credits, role):
+def search_credits(credits, search_roles):
     creators = []
+    search_roles = set(search_roles)
+    
     for credit in credits:
         roles = credit.role
 
+        # print(credit.creator)
         for role_entry in roles:
-            if role.capitalize() == role_entry.name:
+            # print (role_entry.name)
+            if role_entry.name.lower() in search_roles:
                 creators.append(credit.creator)
 
-    return ", ".join(str(creator) for creator in creators)
+    print(creators)
+    return ", ".join(creators)
     
 def get_issue_components (issue_string):
     issue_components = issue_string.split("#")
@@ -73,7 +78,7 @@ def find_issues_in_range(issue):
     series_name = issue_comp[0].strip()
 
     all_issues = []
-    print(issue_range)
+ 
     for i in range(int(issue_range[0]), int(issue_range[1]) + 1, 1):
         issue_string = f'{series_name} #{i}'
         all_issues.append(issue_string)
@@ -144,25 +149,17 @@ def add_graphic_novel():
 
             credits = issue.credits
 
-            writer = search_credits(credits, "writer")
+            writer_result = search_credits(credits, ["writer", "plot", "story"])
+            print(writer_result)
 
-            if writer is None:
-                writer = search_credits(credits, "plot")
-                writer = search_credits(credits, "story")
-                print(writer)
-            
-            if writer not in writers:
-                writers.append(writer)
+            writers.extend([writer.strip() for writer in writer_result.split(",") if writer not in writers])
 
-            penciller = search_credits(credits, "penciller")
-
-            if penciller is None:
-                penciller = search_credits(credits, "artist")
+            penciller = search_credits(credits, ["penciller", "artist"])
 
             if penciller not in pencillers:
                 pencillers.append(penciller)
 
-            inker = search_credits(credits, "inker")
+            inker = search_credits(credits, ["inker", "artist"])
 
             if inker is None:
                 inker = search_credits(credits, "artist")
@@ -189,7 +186,7 @@ def add_graphic_novel():
                                         issue_volume,
                                         issue_number, 
                                         publisher,
-                                        writer,
+                                        writer_result,
                                         penciller,
                                         inker,
                                         colorist,
@@ -203,6 +200,7 @@ def add_graphic_novel():
             else:
                 print(f'{issue_series} Vol. {issue_volume} #{issue_number}  already exists in your list. Skipping this entry.')
 
+    print(writers)
     all_issues = ", ".join(issues_list)
     
     if not None in writers:
