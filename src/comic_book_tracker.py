@@ -9,11 +9,13 @@ mokkari_password = os.getenv('MOKKARI_PASSWORD')
 
 mokkari_api = mokkari.api(mokkari_user, mokkari_password)
 
-#TODO any individual issues inside a trade should be added onto the single comics as well
-def search_issue(title, publisher):
 
-    title_components = title.split("#")
-    series_num = title_components[1].strip()
+def search_issue(title, publisher):
+    title_components = []
+
+    if("#" in title):
+        title_components = title.split("#")
+        series_num = title_components[1].strip()
 
     if "(" in title_components[0]:
         series_name_year = title_components[0].split("(")
@@ -32,11 +34,6 @@ def search_issue(title, publisher):
     issue_obj = [issue for issue in issues if issue.issue_name == title]
     
     return mokkari_api.issue(issue_obj[0].id)
-
-    # for issue in issues:
-    #     if title in issue.issue_name:
-    #         issue_details = mokkari_api.issue(issue.id)
-    #         return issue_details
 
 def search_credits(credits, role):
     for credit in credits:
