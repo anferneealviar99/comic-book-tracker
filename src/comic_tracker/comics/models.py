@@ -5,7 +5,6 @@ class Series(models.Model):
     name = models.CharField(max_length=255)
     volume = models.IntegerField()
     year = models.IntegerField()
-    pass
 
 class Creator (models.Model):
     name = models.CharField(max_length = 100)
@@ -16,7 +15,7 @@ class Creator (models.Model):
 class Publisher(models.Model):
     name = models.CharField(max_length=255)
     series = models.ManyToManyField(Series)
-    
+
 class Comic (models.Model):
     name = models.CharField(max_length=255)
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
