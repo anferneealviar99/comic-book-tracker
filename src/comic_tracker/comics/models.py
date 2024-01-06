@@ -7,7 +7,24 @@ class Series(models.Model):
     year = models.IntegerField()
     pass
 
-class Creator(models.Model):
+class Creator (models.Model):
+    name = models.CharField(max_length = 100)
+
+    def __unicode__(self):
+        return self.name
+    
+class Publisher(models.Model):
+    name = models.CharField(max_length=255)
+    series = models.ManyToManyField(Series)
+    
+class Comic (models.Model):
+    name = models.CharField(max_length=255)
+    series = models.ForeignKey(Series, on_delete=models.CASCADE)
+    creators = models.ManyToManyField(Creator, through='IssueCredits')
+    release_date = models.DateField()
+    publisher = models.ManytoManyField(Publisher)
+
+class IssueCredits(models.Model):
     ROLES = {
         "WR": "Writer",
         "AR": "Artist",
@@ -18,18 +35,15 @@ class Creator(models.Model):
         "PL": "Plot",
         "ED": "Editor"
     }
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    creator = models.ForeignKey(Creator)
+    issue = models.ForeignKey(Comic)
     role = models.CharField(max_length=2, choices=ROLES)
 
-class Publisher(models.Model):
-    pass
 
-class Comic (models.Model):
-    name = models.CharField(max_length=255)
-    series = models.ForeignKey(Series, on_delete=models.CASCADE)
-    writer = models.ManyToManyField(Creator, related_name="Writer")
-    publisher = models.ManytoManyField(Publisher)
-    
+
+
+
+
+
 
     
