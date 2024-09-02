@@ -15,8 +15,8 @@ class Person(models.Model):
     
 class ComicBook(models.Model):
     comic_id = models.CharField(max_length=50, unique=True)
-    title = models.CharField(max_length=255)
     series = models.CharField(max_length=255)
+    number = models.CharField(max_length=7)
     series_year = models.CharField(max_length=4)
     publisher = models.CharField(max_length=255)
     cover_image_url = models.URLField(blank=True, null=True)
