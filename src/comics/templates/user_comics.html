@@ -1,0 +1,20 @@
+{% extends base.html %}
+
+{% block content %}
+<h2>Your Comics</h2>
+
+<div class='comics-list'>
+    {% for user_comic in followed_comics %}
+    <div class='comic'>
+        <img src='{{ user_comic.comic.cover_image_url }}' alt="{{ user_comic.comic.title }} cover">
+        <h3>{{ user_comic.comic.title }}</h3>
+    </div>
+    {% endfor %}
+</div>
+
+<form action="{% url add_comic %}" method="post">
+    {% csrf_token %}
+    <input_type="text" name="comic_title" placeholder="Enter comic for your read list">
+    <button type='submit'>Add Comic</button>
+</form>
+{% endblock %}
