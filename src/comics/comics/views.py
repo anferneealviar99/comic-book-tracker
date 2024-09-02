@@ -27,10 +27,12 @@ def add_comic(request):
             response.raise_for_status()
             data = response.json()
             
-            if isinstance(data, list) and len (data) > 1:
+            results_list = data["results"]
+            
+            if len(results_list) > 1: 
                 return render(request, 'select_comic.html', {'comics': data})
 
-            if isinstance(data, dict):
+            else:
                 comic, created = ComicBook.objects.get_or_create(
                     comic_id =data['comic_id'],
                     defaults={
