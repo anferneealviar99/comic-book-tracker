@@ -109,3 +109,22 @@ def parse_comic_search_input(comic_search_input):
         series, year, issue = comic_search_input.strip(), None, None 
         
     return series, year, issue
+
+def process_comic_roles(data, comic):
+    """Processes and saves roles associated with a comic using data from the Metron API
+
+    Args:
+        data (JSON): the data containing issue details, obtained by GET request
+        comic (ComicBook): the comic book in question
+    """
+    
+    role_data = data['credits']
+    
+    for creator in role_data:
+        creator_name = creator['creator']
+        role_name = creator['role']['name']    
+        
+        role = Role.objects.get_or_create(name=role_name)
+        person = Person.objects.get_or_create(name=creator_name)
+        
+        ComicRole.objects.get_or_create(comic=comic, person=person, role=role)
