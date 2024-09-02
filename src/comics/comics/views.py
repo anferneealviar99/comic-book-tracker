@@ -54,11 +54,11 @@ def add_comic(request):
                             comic_id=comic_id,
                             title = issue_details['issue'],
                             series = issue_details['series'],
-                            series_year = issue_details['year'],
+                            series_year = issue_details['series']['year_began'],
                             cover_image_url = issue_details['image'] 
                         )
                 
-                comic.save()
+                # comic.save()
                 
                 return redirect('fetch_comic_details', comic_id=comic_id)
             
@@ -86,7 +86,7 @@ def select_comic(request):
         series_name = series_details['name']
         series_id = series_details['id']
         
-        series_url=f'{settings.METRON_API_URL}/issue/{series_id}/'
+        series_url=f'{settings.METRON_API_URL}/series/{series_id}/'
         series_response = requests.get(series_url,
                                     auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD))
         
@@ -98,29 +98,30 @@ def select_comic(request):
         
         title = f'{series_name} ({series_year}) #{number}'
         
+        publisher = issue_details['publisher']['name']
         image = issue_details['image']
-        
+    
         comic = ComicBook(
             comic_id=comic_id,
-            title=title
-            series=series_name
+            title=title,
+            series=series_name,
+            number=number,
             series_year=series_year,
-            cover_image_url=image
+            cover_image_url=image,
+            publisher=publisher
         )
         
         comic.save()
         
-        return redirect('fetch_comic_details', comic_id=comic_id)
+        return redirect('fetch_comic_details', comic_id)
 
-        
-    
     return redirect('add_comic')
            
 @login_required
 def fetch_comic_details(request, comic_id=None):
     try:
         comic = ComicBook.objects.get(comic_id=comic_id)
-        details_url = f"{settings.METRON_API_URL}/issue/{comic.comic_id}"
+        details_url = f"{settings.METRON_API_URL}/issue/{comic.comic_id}/"
         
         response = requests.get(
             details_url,
@@ -140,8 +141,8 @@ def fetch_comic_details(request, comic_id=None):
 
         return redirect('user_comics')
 
-    except ComicBook.DoesNotExist:
-        return render(request, 'error.html', {'message': 'Comic was not found.'})
+    # except ComicBook.DoesNotExist:
+    #     return render(request, 'error.html', {'message': 'Comic was not found.'})
     
     except requests.exceptions.RequestException as e:
         return render(request, 'error.html', {'message': str(e)})
@@ -175,9 +176,19 @@ def process_comic_roles(data, comic):
     
     for creator in role_data:
         creator_name = creator['creator']
-        role_name = creator['role']['name']    
-        
-        role, _ = Role.objects.get_or_create(name=role_name)
+        roles = creator['role']
         person, _ = Person.objects.get_or_create(name=creator_name)
+        
+        if len(roles) > 1:
+            for role in roles:
+                role_name = role['name']
+                role, _ = Role.objects.get_or_create(name=role_name)
+                ComicRole.objects.get_or_create(comic=comic, person=person, role=role)
+        else:
+            role = roles[0]
+            role_name = role['name']
+            role, _ = Role.objects.get_or_create(name=role_name)
+            
+
         
         ComicRole.objects.get_or_create(comic=comic, person=person, role=role)

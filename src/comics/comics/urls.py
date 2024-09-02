@@ -27,5 +27,5 @@ urlpatterns = [
     path('my-comics/', user_comics, name='user_comics'),
     path('add_comic/', add_comic, name='add_comic'),
     path('select-comic/', select_comic, name='select_comic'),
-    path('fetch-comic-details/', fetch_comic_details, name='fetch_comic_details')
+    path('fetch-comic-details/<int:comic_id>/', fetch_comic_details, name='fetch_comic_details')
 ]
