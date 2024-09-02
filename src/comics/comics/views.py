@@ -72,3 +72,6 @@ def add_comic(request):
 #     except requests.exceptions.RequestException as e:
 #         return render(request, 'error.html', {'message': str(e)})
         
+def parse_comic_search_input(comic_search_input):
+    pass
+
