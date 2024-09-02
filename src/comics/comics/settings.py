@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts",
+    "comics"
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
-METRON_API_URL = "https:/metron.cloud/api"
+METRON_API_URL = "https://metron.cloud/api"
 METRON_API_USERNAME = "league_overseer"
 METRON_API_PASSWORD = "!mY00n@()53()"

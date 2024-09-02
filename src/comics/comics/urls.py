@@ -17,10 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView 
+from .views import user_comics, add_comic, fetch_comic_details, select_comic
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name='home'),
+    path('my-comics/', user_comics, name='user_comics'),
+    path('add_comic/', add_comic, name='add_comic'),
+    path('select-comic/', select_comic, name='select_comic'),
+    path('fetch-comic-details/', fetch_comic_details, name='fetch_comic_details')
 ]
