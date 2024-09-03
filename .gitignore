@@ -6,3 +6,5 @@ src/__pycache__/
 */*.pyc 
 */*.cpython-311*
 src/comic_tracker/db.sqlite3
+src/comics/db.sqlite3
+src/comics/comics/settings.py
