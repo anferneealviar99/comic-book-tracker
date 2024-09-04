@@ -125,3 +125,5 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
+METRON_API_URL = "https://metron.cloud/api/"
+
