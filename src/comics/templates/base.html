@@ -5,13 +5,25 @@
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Comic Book Tracker{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 
 <body>
+    <div class="container">
+        <ul class="nav bg-info">
+            <li class="nav-item">
+                <a class="nav-link link-right" href="/">HOME</a>
+            </li>
+            <li class='nav-item'>
+                <a class="nav-link link-right" href="/my-comics">MY COMICS</a>
+            </li>
+        </ul>
+    </div>
     <main>
         {% block content %}
         {% endblock %}
     </main>
 </body>
-
 </html>
