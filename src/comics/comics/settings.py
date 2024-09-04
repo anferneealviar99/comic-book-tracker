@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import find_dotenv
+from dotenv import load_dotenv
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -127,6 +127,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
-METRON_API_URL = "https://metron.cloud/api/"
-METRON_API_USERNAME = os.environ.get("METRON_API_USERNAME")
-METRON_API_PASSWORD = os.environ.get("METRON_API_PASSWORD")
+load_dotenv()
+METRON_API_URL = "https://metron.cloud/api"
+METRON_API_USERNAME = os.getenv("METRON_API_USERNAME")
+METRON_API_PASSWORD = os.getenv("METRON_API_PASSWORD")

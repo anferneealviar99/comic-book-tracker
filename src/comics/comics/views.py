@@ -32,38 +32,38 @@ def add_comic(request):
         if issue:
             params['number'] = issue
             
-        try:
-            response = requests.get(url, 
-                                    auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD),
-                                    params=params
-            )
-            response.raise_for_status()
-            data = response.json()
-            
-            results_list = data["results"]
-            
-            if len(results_list) > 1: 
-                return render(request, 'select_comic.html', {'comics': results_list})
+        # try:
+        response = requests.get(url, 
+                                auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD),
+                                params=params
+        )
+        response.raise_for_status()
+        data = response.json()
+        
+        results_list = data["results"]
+        
+        if len(results_list) > 1: 
+            return render(request, 'select_comic.html', {'comics': results_list})
 
-            else:
-                issue_details = results_list[0]
-                
-                comic_id = issue_details['id']
-                
-                comic = ComicBook(
-                            comic_id=comic_id,
-                            title = issue_details['issue'],
-                            series = issue_details['series'],
-                            series_year = issue_details['series']['year_began'],
-                            cover_image_url = issue_details['image'] 
-                        )
-                
-                # comic.save()
-                
-                return redirect('fetch_comic_details', comic_id=comic_id)
+        else:
+            issue_details = results_list[0]
             
-        except requests.exceptions.RequestException as e:
-            return render(request, 'error.html', {'message': str(e)})
+            comic_id = issue_details['id']
+            
+            comic = ComicBook(
+                        comic_id=comic_id,
+                        title = issue_details['issue'],
+                        series = issue_details['series'],
+                        series_year = issue_details['series']['year_began'],
+                        cover_image_url = issue_details['image'] 
+                    )
+            
+            # comic.save()
+            
+            return redirect('fetch_comic_details', comic_id=comic_id)
+            
+        # except requests.exceptions.RequestException as e:
+        #     return render(request, 'error.html', {'message': str(e)})
     
     return render(request, 'add_comic.html')
 
