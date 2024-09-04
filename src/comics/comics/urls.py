@@ -25,7 +25,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name='home'),
     path('my-comics/', user_comics, name='user_comics'),
-    path('add_comic/', add_comic, name='add_comic'),
+    path('add-comic/', add_comic, name='add_comic'),
     path('select-comic/', select_comic, name='select_comic'),
     path('fetch-comic-details/<int:comic_id>/', fetch_comic_details, name='fetch_comic_details')
 ]
