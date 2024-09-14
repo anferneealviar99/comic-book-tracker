@@ -6,26 +6,25 @@
     <meta charset="utf-8">
     <title>{% block title %}Comic Book Tracker{% endblock %}</title>
     
-
-    <link rel=:"stylesheet" type="text/css" href="{% static 'dist/styles.css' %}">
-
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}">
 </head>
 
 <body>
     <header class="bg-blue-950 py-4">
         <nav class="flex justify-between items center w-[92%] mx-auto">
             <div class="w-16 font-bold text-violet-700">
-               <a href="/">ComicHub</a>
+               <a href="{% url 'home' %}">ComicHub</a>
             </div>
             <div class="nav-links duration-500 md:static absolute md:min-h-fit min-h-[60vh]
                         left-0 top-[-100%] md:w-auto w-full flex items-center px-5">
                 <ul class="flex">
                     {% if user.is_authenticated %}
                     <li class="mr-6">
-                        <a class="hover:text-blue-800" href="/my-comics/">My Comics</a>
+                        <a class="hover:text-blue-800" href="{% url 'user_comics' %}">My Comics</a>
                     </li>
                     <li class="mr-6">
-                        <a class="hover:text-blue-800" href="/add-comic/">Add Comic</a>
+                        <a class="hover:text-blue-800" href="{% url 'add_comic' %}">Add Comic</a>
                     </li>
                     {% endif %}
                 </ul>

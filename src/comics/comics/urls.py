@@ -30,6 +30,6 @@ urlpatterns = [
     path('add-comic/', add_comic, name='add_comic'),
     path('select-comic/', select_comic, name='select_comic'),
     path('fetch-comic-details/<int:comic_id>/', fetch_comic_details, name='fetch_comic_details')
-]
+] + static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
 
 
