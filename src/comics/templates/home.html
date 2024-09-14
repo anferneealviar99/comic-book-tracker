@@ -6,10 +6,10 @@
 
 <div class="mt-14 block">
     {% if user.is_authenticated %}
-    Welcome, {{ user.username }}. 
+    <p class="p-4">Welcome, {{ user.username }}.</p>
 
     <div class="mt-10 block">
-        {% with wrapper_class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8" image_class="w-48 h-auto p-2" container_class="flex flex-col items-center" %}
+        {% with wrapper_class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10" image_class="w-48 h-auto p-2" container_class="flex flex-col items-center" %}
             {% include 'comics_list.html'%}
         {% endwith %}
     </div>
