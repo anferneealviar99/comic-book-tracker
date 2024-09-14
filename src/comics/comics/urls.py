@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView 
-from .views import user_comics, add_comic, fetch_comic_details, select_comic
+from .views import user_comics, add_comic, fetch_comic_details, select_comic, dashboard_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,6 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("", dashboard_view, name="home"),
     path("", TemplateView.as_view(template_name="home.html"), name='home'),
     path('my-comics/', user_comics, name='user_comics'),
     path('add-comic/', add_comic, name='add_comic'),

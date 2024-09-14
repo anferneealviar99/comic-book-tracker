@@ -2,28 +2,11 @@
 
 {% block title %}{{ user.username }}'s Comics{% endblock %}
 {% block content %}
+
 <div class="mt-20 block">
-    <h1 class="font-bold p-1 mx-2.5">Your Comics</h1>
-    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 p-5'> 
-        {% if followed_comics %}
-            {% for user_comic in followed_comics %}
-            <div class='text-center p-2.5'>
-                <img class="w-full h-auto rounded-md mb-2.5" 
-                    src='{{ user_comic.comic.cover_image_url }}' 
-                    alt="{{ user_comic.comic.title }} cover">
-                <h3>{{ user_comic.comic.title }}</h3>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="no-data">No followed comics. Would you like to add one?</p>
-        {% endif %}
-    </div>
-    <form class="place-content-center" action={% url 'add_comic' %} method="post">
-        <div class = "flex items-center border-b border-teal-500 py-2">
-            {% csrf_token %}
-            <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name="comic_title" placeholder="Enter comic for your read list">
-            <button class="bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded text-white font-bold rounded" type='submit'>Add Comic</button>
-        </div>
-    </form>
+    {% with image_class="w-full h-auto rounded-md mb-2.5" %}
+        {% include 'comics_list.html' %}
+    {% endwith %}
 </div>
+
 {% endblock %}

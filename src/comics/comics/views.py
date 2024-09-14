@@ -6,6 +6,11 @@ import requests
 import regex as re
 
 @login_required
+def dashboard_view(request):
+    followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
+    return render(request, 'home.html', {'followed_comics': followed_comics})
+
+@login_required
 def user_comics(request):
     # Fetch comics followed by the user
     followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
