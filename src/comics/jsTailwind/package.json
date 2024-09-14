@@ -1,0 +1,12 @@
+{
+  "name": "jstailwind",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tailwind -i ../static/src/tailwind.css -o ../static/dist/styles.css --watch"
+    },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

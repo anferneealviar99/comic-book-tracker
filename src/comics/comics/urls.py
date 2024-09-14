@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView 
 from .views import user_comics, add_comic, fetch_comic_details, select_comic
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,3 +31,5 @@ urlpatterns = [
     path('select-comic/', select_comic, name='select_comic'),
     path('fetch-comic-details/<int:comic_id>/', fetch_comic_details, name='fetch_comic_details')
 ]
+
+
