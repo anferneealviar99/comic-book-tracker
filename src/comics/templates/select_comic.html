@@ -4,22 +4,27 @@
 {% block content %}
 
 <div class="mt-20">
-    <h2>Which comic do you want to add?</h2>
-    <p>Multiple matches found. Please select the correct comic.</p>
-
-    <form action="{% url 'select_comic' %}" method="post">
-        {% csrf_token %}
-        <div class='list-group'>
-            {% for comic in comics %}
-            <div class='list-group-item'>
-                <input type='radio' name='selected-comic-name' value='{{ comic.id }}' id='{{ comic.id }}' required>
-                <label for="comic {{ comic.id }}">
-                    <strong>{{ comic.issue }}</strong> - {{ comic.series.name }} ({{ comic.series.year_began}})
-                </label>
+    <div class="mx-4">
+        <h2>Which comic do you want to add?</h2>
+        <p>Multiple matches found. Please select the correct comic.</p>
+    </div>
+    <div class="p-4">
+        <form action="{% url 'select_comic' %}" method="post">
+            {% csrf_token %}
+            <div class='list-group'>
+                {% for comic in comics %}
+                <div class='list-group-item'>
+                    <input type='radio' name='selected-comic-name' value='{{ comic.id }}' id='{{ comic.id }}' required>
+                    <label for="comic {{ comic.id }}">
+                        <strong>{{ comic.issue }}</strong> - {{ comic.series.name }} ({{ comic.series.year_began}})
+                    </label>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        <button type="submit" class='btn btn-primary mt3'>Confirm Selection</button>
-    </form>
+            <div class="p-4">
+                <button class='bg-indigo-500 p-2' type="submit">Confirm Selection</button>
+            </div>    
+        </form>
+    </div>
 </div>
 {% endblock %}
