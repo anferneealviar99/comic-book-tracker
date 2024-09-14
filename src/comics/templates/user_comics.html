@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Your Comics</h2>
-
-<div class='comics-list'>
-    {% if followed_comics %}
-        {% for user_comic in followed_comics %}
-        <div class='comic'>
-            <img src='{{ user_comic.comic.cover_image_url }}' alt="{{ user_comic.comic.title }} cover">
-            <h3>{{ user_comic.comic.title }}</h3>
-        </div>
-        {% endfor %}
-    {% else %}
-        <p class="no-data">No followed comics. Would you like to add one?</p>
-    {% endif %}
+<div class="mt-20 block">
+    <h2 class="font-bold p-1 mx-2.5">Your Comics</h2>
+    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 p-5'> 
+        {% if followed_comics %}
+            {% for user_comic in followed_comics %}
+            <div class='text-center p-2.5'>
+                <img class="w-full h-auto rounded-md mb-2.5" src='{{ user_comic.comic.cover_image_url }}' alt="{{ user_comic.comic.title }} cover">
+                <h3>{{ user_comic.comic.title }}</h3>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-data">No followed comics. Would you like to add one?</p>
+        {% endif %}
+    </div>
+    <form action={% url 'add_comic' %} method="post">
+        {% csrf_token %}
+        <input type="text" name="comic_title" placeholder="Enter comic for your read list">
+        <button type='submit'>Add Comic</button>
+    </form>
 </div>
-
-<form action={% url 'add_comic' %} method="post">
-    {% csrf_token %}
-    <input type="text" name="comic_title" placeholder="Enter comic for your read list">
-    <button type='submit'>Add Comic</button>
-</form>
 {% endblock %}

@@ -11,13 +11,13 @@
 </head>
 
 <body>
-    <header class="bg-blue-950 py-4 text-white fixed w-full top-0 left-0">
+    <header class="bg-blue-950 text-white fixed w-full top-0 left-0">
         <nav class="flex justify-between items center w-[92%] mx-auto">
-            <div class="w-16 font-bold text-violet-700">
+            <div class="py-4 w-16 font-bold text-violet-700">
                <a href="{% url 'home' %}">ComicHub</a>
             </div>
-            <div class="container">
-                <ul class="ml-8 space-x-4">
+            <div class="py-4">
+                <ul class="ml-1">
                     <li class="inline-block">
                         <a href="{% url 'user_comics' %}" class="hover:text-gray-300">
                             My Comics

@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Which comic do you want to add?</h2>
-<form action="{% url 'add_comic' %}" method="post">
-    {% csrf_token %}
-    <input type="text" name="comic_title" placeholder="Enter comic for your read list">
-    <button type='submit'>Add Comic</button>
-</form>
+
+<div class="mt-10 inline-block">
+    <h2 class="my-5">Which comic do you want to add?</h2>
+    <form action="{% url 'add_comic' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="comic_title" placeholder="Enter comic for your read list">
+        <button class="button" type='submit'>Add Comic</button>
+    </form>
+</div>
 {% endblock %}
