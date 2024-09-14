@@ -9,7 +9,7 @@
     Welcome, {{ user.username }}. 
 
     <div class="mt-10 block">
-        {% with image_class="w-48 h-auto mb-4" %}
+        {% with wrapper_class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8" image_class="w-48 h-auto p-2" container_class="flex flex-col items-center" %}
             {% include 'comics_list.html'%}
         {% endwith %}
     </div>
