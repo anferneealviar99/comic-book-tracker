@@ -6,7 +6,7 @@ module.exports = {
   },
   darkMode: 'media',
   content: [
-      '../comics/templates/**/*.html',
+      '../templates/**/*.html',
   ],
   theme: {
     extend: {},

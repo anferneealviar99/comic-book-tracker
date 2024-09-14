@@ -11,22 +11,23 @@
 </head>
 
 <body>
-    <header class="bg-blue-950 py-4">
+    <header class="bg-blue-950 py-4 text-white fixed w-full top-0 left-0">
         <nav class="flex justify-between items center w-[92%] mx-auto">
             <div class="w-16 font-bold text-violet-700">
                <a href="{% url 'home' %}">ComicHub</a>
             </div>
-            <div class="nav-links duration-500 md:static absolute md:min-h-fit min-h-[60vh]
-                        left-0 top-[-100%] md:w-auto w-full flex items-center px-5">
-                <ul class="flex">
-                    {% if user.is_authenticated %}
-                    <li class="mr-6">
-                        <a class="hover:text-blue-800" href="{% url 'user_comics' %}">My Comics</a>
+            <div class="container">
+                <ul class="ml-8 space-x-4">
+                    <li class="inline-block">
+                        <a href="{% url 'user_comics' %}" class="hover:text-gray-300">
+                            My Comics
+                        </a>
                     </li>
-                    <li class="mr-6">
-                        <a class="hover:text-blue-800" href="{% url 'add_comic' %}">Add Comic</a>
+                    <li class="inline-block">
+                        <a href="{% url 'add_comic' %}" class="hover:text-gray-300">
+                            Add Comic
+                        </a>
                     </li>
-                    {% endif %}
                 </ul>
             </div>
         </nav>
