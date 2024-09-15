@@ -4,9 +4,12 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tailwind -i ../comics/static/src/tailwind.css -o ../comics/static/dist/styles.css --watch"
-    },
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "tailwindcss": "^3.4.11"
+  }
 }

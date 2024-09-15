@@ -3,11 +3,17 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Log In</h2>
+<div class="mt-20 block">
+    <h2>Log In</h2>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Log In</button>
-</form>
+    <form class="w-full max-w-sm" method="post">
+        <div class="md:flex md:items-center mb-6">
+            <div class="md:w-1/3">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Log In</button>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}
