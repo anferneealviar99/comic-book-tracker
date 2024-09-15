@@ -5,10 +5,13 @@ from .models import ComicBook, UserComic, Role, Person, ComicRole
 import requests 
 import regex as re
 
-@login_required
-def dashboard_view(request):
-    followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
-    return render(request, 'home.html', {'followed_comics': followed_comics})
+
+def homepage_view(request):
+    if request.user.is_authenticated:
+        followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
+        return render(request, 'home.html', {'followed_comics': followed_comics})
+    else:
+        return render(request, 'home.html')
 
 @login_required
 def user_comics(request):

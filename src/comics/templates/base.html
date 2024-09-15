@@ -29,6 +29,11 @@
                             Add Comic
                         </a>
                     </li>
+                    <li class="inline-block">
+                        <form action={% url 'logout' %} class="hover:text-gray-300" method="post">
+                            {% csrf_token %}
+                            <button type='submit'>Logout</button>
+                        </form>
                     {% else %}
                     <li class="inline-block">
                         <a href="{% url 'login' %}" class="hover:text-gray-300">

@@ -6,21 +6,20 @@
 
 <div class="mt-14 block">
     {% if user.is_authenticated %}
-    <p class="p-4">Welcome, {{ user.username }}.</p>
+        <p class="p-4">Welcome, {{ user.username }}.</p>
 
-    <div class="mt-10 block">
-        {% with wrapper_class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10" image_class="w-48 h-auto p-2" container_class="flex flex-col items-center" %}
-            {% include 'comics_list.html'%}
-        {% endwith %}
-    </div>
-    <p><a class="hover:text-gray-600" href="{% url 'password_change' %}">Change Password</a></p>
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Log Out</button>
+        <div class="mt-10 block">
+            {% with wrapper_class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10" image_class="w-48 h-auto p-2" container_class="flex flex-col items-center" %}
+                {% include 'comics_list.html'%}
+            {% endwith %}
+        </div>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
     {% else %}
-    <p>Welcome, guest.</p>
-    <p><a href="{% url 'password_reset' %}">Password Reset</a></p>
-    <a href="{% url 'login' %}">Log In</a>
+        <p>Welcome, guest.</p>
+        <p><a href="{% url 'password_reset' %}">Password Reset</a></p>
+        <a href="{% url 'login' %}">Log In</a>
     {% endif %}
 
 </div>

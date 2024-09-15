@@ -618,6 +618,26 @@ video {
   margin-bottom: 1.5rem;
 }
 
+.ml-2\.5 {
+  margin-left: 0.625rem;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
+.ml-4 {
+  margin-left: 1rem;
+}
+
 .block {
   display: block;
 }
@@ -656,6 +676,10 @@ video {
 
 .max-w-sm {
   max-width: 24rem;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
 }
 
 .appearance-none {

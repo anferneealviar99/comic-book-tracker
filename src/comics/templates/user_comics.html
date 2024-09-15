@@ -2,8 +2,11 @@
 
 {% block title %}{{ user.username }}'s Comics{% endblock %}
 {% block content %}
-
 <div class="mt-20 block">
+    <h2 class="font-bold ml-4">Profile Options</h2>
+    <p class="hover:text-gray-300 ml-5"><a class="hover:text-gray-600" href="{% url 'password_change' %}">Change Password</a></p>
+</div>
+<div class="mt-5 block">
     {% with wrapper_class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 p-5' image_class="w-full h-auto rounded-md mb-2.5" container_class="text-center p-2.5" %}
         {% include 'comics_list.html' %}
     {% endwith %}
