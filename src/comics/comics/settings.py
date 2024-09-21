@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     "accounts",
     "comics",
     "widget_tweaks",
+    "ratelimit"
 ]
 
 MIDDLEWARE = [
+    "django_ratelimit.middleware.RatelimitMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -53,6 +55,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+}
 
 ROOT_URLCONF = "comics.urls"
 
@@ -139,3 +147,8 @@ load_dotenv()
 METRON_API_URL = "https://metron.cloud/api"
 METRON_API_USERNAME = os.getenv("METRON_API_USERNAME")
 METRON_API_PASSWORD = os.getenv("METRON_API_PASSWORD")
+
+RATELIMIT_GLOBAL = True
+RATELIMIT_RATE='30/m'
+RATELIMIT_METHODS=['GET']
+RATELIMIT_BLOCK=True
