@@ -12,17 +12,25 @@ def homepage_view(request):
     # Change the view based on whether the visitor is authenticated or not 
     if request.user.is_authenticated:
         followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
-        return render(request, 'home.html', {'followed_comics': followed_comics})
+        sort_by = 'comic__title'
+        return render(request, 'home.html', {'followed_comics': followed_comics, 'current_sort': sort_by})
     else:
         return render(request, 'home.html')
 
 @login_required
 def user_comics(request):
     # Fetch comics followed by the user
+    sort_by = request.GET.get('sort')
+    
+    valid_sort_fields = ['comic__title', '-comic__title', 'comic__series', '-comic__series']
+    
+    if sort_by not in valid_sort_fields:
+        sort_by = 'comic__title'
+    
     followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
+    followed_comics = followed_comics.order_by(sort_by)
     
     return render(request, 'user_comics.html', {'followed_comics': followed_comics})
-
 @login_required
 def add_comic(request):
     if request.method == 'POST':
@@ -204,6 +212,7 @@ def fetch_comic_details(request, comic_id=None):
     user_comic.save()
 
     return redirect('user_comics')   
+
     
 def parse_comic_search_input(comic_search_input):
     """
