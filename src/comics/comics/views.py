@@ -78,50 +78,59 @@ def add_comic(request):
 @login_required
 def select_comic(request):
     if request.method == 'POST':
-        comic_id = request.POST.get('selected-comic-name')
         
-        url = f'{settings.METRON_API_URL}/issue/{comic_id}/'
+        if(ComicBook.objects.filter(comic_id=comic_id).exists()):
+            comic = ComicBook.objects.get(comic_id=comic_id)
+            comic_id = comic.comic_id
+            
+            
+            return redirect('fetch_comic_details', comic_id)
         
-        response = requests.get(url,
-                                auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD))
+        else:
+            comic_id = request.POST.get('selected-comic-name')
         
-        response.raise_for_status()
-        issue_details = response.json()
-        
-        comic_id = comic_id
-        
-        series_details = issue_details['series']
-        series_name = series_details['name']
-        series_id = series_details['id']
-        
-        series_url=f'{settings.METRON_API_URL}/series/{series_id}/'
-        series_response = requests.get(series_url,
+            url = f'{settings.METRON_API_URL}/issue/{comic_id}/'
+            
+            response = requests.get(url,
                                     auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD))
+            
+            response.raise_for_status()
+            issue_details = response.json()
+            
+            comic_id = comic_id
+            
+            series_details = issue_details['series']
+            series_name = series_details['name']
+            series_id = series_details['id']
+            
+            series_url=f'{settings.METRON_API_URL}/series/{series_id}/'
+            series_response = requests.get(series_url,
+                                        auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD))
+            
+            series_response.raise_for_status()
+            series_details = series_response.json()
+            series_year = series_details['year_began']
+            
+            number=issue_details['number']
+            
+            title = f'{series_name} ({series_year}) #{number}'
+            
+            publisher = issue_details['publisher']['name']
+            image = issue_details['image']
         
-        series_response.raise_for_status()
-        series_details = series_response.json()
-        series_year = series_details['year_began']
-        
-        number=issue_details['number']
-        
-        title = f'{series_name} ({series_year}) #{number}'
-        
-        publisher = issue_details['publisher']['name']
-        image = issue_details['image']
-    
-        comic = ComicBook(
-            comic_id=comic_id,
-            title=title,
-            series=series_name,
-            number=number,
-            series_year=series_year,
-            cover_image_url=image,
-            publisher=publisher
-        )
-        
-        comic.save()
-        
-        return redirect('fetch_comic_details', comic_id)
+            comic = ComicBook(
+                comic_id=comic_id,
+                title=title,
+                series=series_name,
+                number=number,
+                series_year=series_year,
+                cover_image_url=image,
+                publisher=publisher
+            )
+            
+            comic.save()
+            
+            return redirect('fetch_comic_details', comic_id)
 
     return redirect('add_comic')
            
