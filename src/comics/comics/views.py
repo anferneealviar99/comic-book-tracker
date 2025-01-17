@@ -30,7 +30,7 @@ def add_comic(request):
         series, year, issue = parse_comic_search_input(comic_search_input)
         
         # Create flexible cache key based on available search parameters
-        search_cache_key = f"search_results_{"_".join(series.split(" ")) or ""}_{year or ""}_{issue or ""}"
+        search_cache_key = f'search_results_{"_".join(series.split(" ")) or ""}_{year or ""}_{issue or ""}'
         cached_results = cache.get(search_cache_key)
         
         if cached_results:
@@ -164,7 +164,8 @@ def select_comic(request):
             publisher=publisher
         )
         
-        comic.save()
+        if not ComicBook.objects.filter(comic_id=comic.comic_id).exists():
+            comic.save()
         
         return redirect('fetch_comic_details', comic_id)
 
