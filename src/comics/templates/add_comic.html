@@ -3,12 +3,12 @@
 {% block title %}Add Comic{% endblock %}
 {% block content %}
 
-<div class="mt-10 inline-block">
+<div class="mt-10 inline-block px-6 py-4">
     <h2 class="my-5">Which comic do you want to add?</h2>
-    <form action="{% url 'add_comic' %}" method="post">
+    <form action="{% url 'add_comic' %}" method="post" class='flex items-center gap-4'>
         {% csrf_token %}
-        <input type="text" name="comic_title" placeholder="Enter comic for your read list">
-        <button class="button" type='submit'>Add Comic</button>
+        <input class="border border-gray-300 rounded px-3 py-2 w-80" type="text" name="comic_title" placeholder="Action Comics (1938) #1">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='submit'>Add Comic</button>
     </form>
 </div>
 {% endblock %}

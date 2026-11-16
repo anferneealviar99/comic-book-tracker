@@ -46,7 +46,7 @@ def user_comics(request):
     followed_comics = UserComic.objects.filter(user=request.user).select_related('comic')
     followed_comics = followed_comics.order_by(sort_by)
     
-    return render(request, 'user_comics.html', {'followed_comics': followed_comics})
+    return render(request, 'user_comics.html', {'followed_comics': followed_comics, 'current_sort': sort_by})
 
 @login_required
 def add_comic(request):
