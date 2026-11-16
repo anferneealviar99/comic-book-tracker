@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-+@*kr2*q81tc)z_l+_9pa3qrwkuc2x2dcpqp7*78#d#8foarb3"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
 
@@ -145,8 +145,3 @@ load_dotenv()
 METRON_API_URL = "https://metron.cloud/api"
 METRON_API_USERNAME = os.getenv("METRON_API_USERNAME")
 METRON_API_PASSWORD = os.getenv("METRON_API_PASSWORD")
-
-RATELIMIT_GLOBAL = True
-RATELIMIT_RATE='30/m'
-RATELIMIT_METHODS=['GET']
-RATELIMIT_BLOCK=True
