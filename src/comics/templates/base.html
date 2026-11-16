@@ -21,6 +21,11 @@
                 <ul class="ml-8 space-x-4">
                     {% if user.is_authenticated %}
                     <li class="inline-block">
+                        <a href="{% url 'new_comics' %}" class="hover:text>gray-300">
+                            New Comics
+                        </a>
+                    </li>
+                    <li class="inline-block">
                         <a href="{% url 'user_comics' %}" class="hover:text-gray-300">
                             My Comics
                         </a>

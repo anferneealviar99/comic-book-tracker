@@ -42,11 +42,9 @@ INSTALLED_APPS = [
     "accounts",
     "comics",
     "widget_tweaks",
-    "ratelimit"
 ]
 
 MIDDLEWARE = [
-    "django_ratelimit.middleware.RatelimitMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

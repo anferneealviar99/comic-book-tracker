@@ -8,7 +8,7 @@
 </div>
 <div class="mt-5 block">
     <form method='get' id='sortForm'>
-        <label for='sort'>Sort</label>
+        <label for='sort'>Sort by</label>
         <select name='sort'>
             <option value='comic__title'>
                 Title (Ascending) 
@@ -22,7 +22,7 @@
             <option value='-comic__series'>
                 Series Name (Z-A)
             </option>
-            <input type="submit" value='sort'>
+            <input type="button" value='Sort' onclick='document.getElementById("sortForm").submit();'>
         </select>
     </form>
     {% with wrapper_class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 p-5' image_class="w-full h-auto rounded-md mb-2.5" container_class="text-center p-2.5" %}

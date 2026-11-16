@@ -17,6 +17,22 @@ def homepage_view(request):
     else:
         return render(request, 'home.html')
 
+def new_comics(request):
+    url = f'{settings.METRON_API_URL}/issues/new/'
+    
+    try:
+        response = requests.get(url,
+                                auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD))
+        response.raise_for_status()
+        data = response.json()
+        
+        new_issues = data['results']
+        
+        return render(request, 'new_comics.html', {'new_issues': new_issues})
+    
+    except requests.exceptions.RequestException as e:
+        return render(request, 'error.html', {'message': str(e)})
+
 @login_required
 def user_comics(request):
     # Fetch comics followed by the user
@@ -31,6 +47,7 @@ def user_comics(request):
     followed_comics = followed_comics.order_by(sort_by)
     
     return render(request, 'user_comics.html', {'followed_comics': followed_comics})
+
 @login_required
 def add_comic(request):
     if request.method == 'POST':

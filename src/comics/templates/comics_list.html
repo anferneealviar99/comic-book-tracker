@@ -2,19 +2,25 @@
 <div class="{{ wrapper_class }}"> 
     {% if followed_comics %}
         {% for user_comic in followed_comics %}
-        <div class= "{{ container_class }}">
-            <img class= "{{ image_class }}"
-                src='{{ user_comic.comic.cover_image_url }}' 
-                alt="{{ user_comic.comic.title }} cover">
-            <p class="text-center">{{ user_comic.comic.title }}</p>
-        </div>
+            <div class= "{{ container_class }}">
+                {% if user_comic.comic.cover_image_url %}
+                    <img class= "{{ image_class }}"
+                    src='{{ user_comic.comic.cover_image_url }}' 
+                    alt="{{ user_comic.comic.title }} cover">
+                {% else %}
+                    <div class="{{ image_class }} flex items-center justify-center bg-gray-200 text-xs text-gray-500"> 
+                        No cover
+                    </div>
+                {% endif %}
+                <p class="text-center">{{ user_comic.comic.title }}</p>
+            </div>
         {% endfor %}
     {% else %}
         <p class="no-data">No followed comics. Would you like to add one?</p>
     {% endif %}
 </div>
 <div class="flex items-center justify-center">
-    <form class="flex items-center" action={% url 'add_comic' %} method="post">
+    <form class="flex items-center" action="{% url 'add_comic' %}" method="post">
         <div class = "flex items-center border-b border-teal-500 py-2">
             {% csrf_token %}
             <input class="appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name="comic_title" placeholder="Enter comic for your read list">
