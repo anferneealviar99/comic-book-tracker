@@ -12,7 +12,11 @@
                     </div>
                 {% endif %}
                 <p class="text-center">{{ user_comic.comic.title }}</p>
-            </div>
+                <form method='post' action="{% url 'remove_comic' user_comic.comic.comic_id %}" class="mt-1">
+                    {% csrf_token %}
+                    <button type='submit' class="text-xs text-red-600 hover:text-red-800 hover:underline">Remove</button>
+                </form>
+            </div>   
         {% endfor %}
     {% else %}
         <p class="no-data">No followed comics. Would you like to add one?</p>

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import ComicBook, UserComic, Role, Person, ComicRole
+from accounts.models import CustomUser
 import requests 
 import regex as re
 
@@ -134,6 +135,30 @@ def add_comic(request):
         return redirect('fetch_comic_details', comic_id=comic_id)
     
     return render(request, 'add_comic.html')
+
+@login_required
+def remove_comic(request, comic_id):
+    if request.method == 'POST':
+        UserComic.objects.filter(user=request.user, comic__comic_id=comic_id).delete()
+    return redirect('user_comics')
+
+@login_required
+def change_username(request):
+    if request.method == 'POST':
+        new_username = request.POST.get('username', '').strip()
+        
+        if not new_username:
+            return render(request, 'change_username.html', {'error': 'Username cannot be empty.'})
+        
+        if CustomUser.objects.filter(username=new_username).exclude(pk=request.user.pk).exists():
+            return render(request, 'change_username.html', {'error': 'That username is already taken.'})
+        
+        request.user.username = new_username
+        request.user.save()
+        
+        return redirect('user_comics')
+
+    return render(request, 'change_username.html')
 
 @login_required
 def select_comic(request):

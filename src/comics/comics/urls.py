@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView 
-from .views import user_comics, add_comic, fetch_comic_details, select_comic, homepage_view, new_comics
+from .views import user_comics, add_comic, fetch_comic_details, select_comic, homepage_view, new_comics, remove_comic, change_username
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,7 +30,9 @@ urlpatterns = [
     path('add-comic/', add_comic, name='add_comic'),
     path('select-comic/', select_comic, name='select_comic'),
     path('fetch-comic-details/<str:comic_id>/', fetch_comic_details, name='fetch_comic_details'),
-    path('new-comics/', new_comics, name='new_comics')
+    path('new-comics/', new_comics, name='new_comics'),
+    path('remove-comic/<str:comic_id>', remove_comic, name='remove_comic'),
+    path('change-username/', change_username, name='change_username')
 ] + static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
 
 
