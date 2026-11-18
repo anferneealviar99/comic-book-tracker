@@ -7,6 +7,7 @@ from .models import ComicBook, UserComic, Role, Person, ComicRole
 from accounts.models import CustomUser
 import requests 
 import regex as re
+from datetime import date, timedelta
 
 
 def homepage_view(request):
@@ -34,6 +35,65 @@ def new_comics(request):
     except requests.exceptions.RequestException as e:
         return render(request, 'error.html', {'message': str(e)})
 
+def new_comics(request):
+    # Grab new comics
+    publisher_filter = request.GET.get('publisher', '')
+    group_by = request.GET.get('group_by', 'date')
+    valid_groups = ['date', 'publisher']
+    
+    if group_by not in valid_groups:
+        group_by = 'date'
+        
+    cache_key = 'new_comics_issues'
+    issues = cache.get(cache_key)
+    url = f'{settings.METRON_API_URL}/issue/'
+    
+    today = date.today()
+    week_ago = today - timedelta(days=7)
+    params = {
+        'store_date_range_before': today.isoformat(),
+        'store_date_range_after': week_ago.isoformat()
+    }
+        
+    if not issues:
+        if publisher_filter:
+            params['publisher_name'] = publisher_filter
+        
+        try:
+            response = requests.get(
+                url,
+                auth=(settings.METRON_API_USERNAME, settings.METRON_API_PASSWORD),
+                params=params
+            )
+            
+            response.raise_for_status()
+            data = response.json()
+            issues = data.get('results', [])
+            cache.set(cache_key, issues, timeout=60*60*6)
+        except requests.exceptions.RequestException as e:
+            return render(request, 'error.html', {'message': str(e)})
+        
+    issues.sort(
+        key=lambda x: x.get('store_date') or x.get('cover_date') or '',
+        reverse=True
+    )
+    
+    grouped = {}
+    
+    for issue in issues:
+        if group_by == 'date':
+            key = issue.get('store_date') or issue.get('cover_date') or 'Unknown Date'
+        else:
+            key = issue.get('publisher', {}).get('name', 'Unknown Publisher')
+        grouped.setdefault(key, []).append(issue)
+        
+        
+    return render(request, 'new_comics.html', {
+        'grouped_issues': grouped,
+        'group_by': group_by,
+    })
+    
+    
 @login_required
 def user_comics(request):
     # Fetch comics followed by the user
