@@ -1,5 +1,5 @@
 # Comic Book Tracker
 
-Comic Book Reading List application tracking all read comics and graphic novels.
+A full-stack web application for tracking comics to read.
 
-This application utilises the Metron API, an open-source comic book database.
+This application utilises the Metron API, an open-source comic book database, and is built with Django and Tailwind CSS.
