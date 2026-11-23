@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["https://comic-book-tracker-production.up.railway.app"]
 
 
 # Application definition
@@ -90,6 +90,8 @@ DATABASES = {
     )
 }
 
+CSRF_TRUSTED_ORIGINS = ["https://comic-book-tracker-production.up.railway.app", 
+                        ]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
