@@ -1,0 +1,1 @@
+web: python src/comics/manage.py migrate --noinput && python src/comics/manage.py collectstatic --noinput && gunicorn --chdir src/comics comics.wsgi
