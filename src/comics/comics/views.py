@@ -35,8 +35,21 @@ def new_comics(request):
     except requests.exceptions.RequestException as e:
         return render(request, 'error.html', {'message': str(e)})
 
+def get_week_bounds(reference_date = None):
+    """ Return Monday, Wednesday, Sunday for the week containing reference_date """
+    if reference_date is None:
+        reference_date = date.today()
+        
+    monday = reference_date - timedelta(days=reference_date.weekday())
+    wednesday = monday + timedelta(days=2)
+    sunday = monday + timedelta (days=6)
+    
+    return monday, wednesday, sunday     
+    
 def new_comics(request):
     # Grab new comics
+    monday, wednesday, sunday = get_week_bounds()
+    
     publisher_filter = request.GET.get('publisher', '')
     group_by = request.GET.get('group_by', 'date')
     valid_groups = ['date', 'publisher']
@@ -48,11 +61,9 @@ def new_comics(request):
     issues = cache.get(cache_key)
     url = f'{settings.METRON_API_URL}/issue/'
     
-    today = date.today()
-    week_ago = today - timedelta(days=7)
     params = {
-        'store_date_range_before': today.isoformat(),
-        'store_date_range_after': week_ago.isoformat()
+        'store_date_range_before': sunday.isoformat(),
+        'store_date_range_after': monday.isoformat()
     }
         
     if not issues:
@@ -90,6 +101,9 @@ def new_comics(request):
         
     return render(request, 'new_comics.html', {
         'grouped_issues': grouped,
+        'week_start': monday,
+        'week_link_date': wednesday,
+        'week_end': sunday,
         'group_by': group_by,
     })
     
