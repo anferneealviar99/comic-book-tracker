@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["comic-book-tracker-production.up.railway.app",]
+ALLOWED_HOSTS = ["comic-book-tracker-production.up.railway.app", 'https://comic-book-tracker-production.up.railway.app/']
 
 
 # Application definition
@@ -90,7 +90,7 @@ DATABASES = {
     )
 }
 
-CSRF_TRUSTED_ORIGINS = ["https://comic-book-tracker-production.up.railway.app", 
+CSRF_TRUSTED_ORIGINS = ["https://comic-book-tracker-production.up.railway.app/", 
                         ]
 
 # Password validation
@@ -148,3 +148,7 @@ METRON_API_USERNAME = os.getenv("METRON_API_USERNAME")
 METRON_API_PASSWORD = os.getenv("METRON_API_PASSWORD")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True 
