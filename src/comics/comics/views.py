@@ -80,6 +80,14 @@ def new_comics(request):
             response.raise_for_status()
             data = response.json()
             issues = data.get('results', [])
+            
+            if issues:
+                print("DEBUG FIRST ISSUE:", issues[0])
+                print("DEBUG KEYS: ", issues[0].keys())
+                print("INSIDE THE KEYS: ")
+                for key in issues[0].keys():
+                    print(f'{key}: {issues[0][key]}')
+                
             cache.set(cache_key, issues, timeout=60*60*6)
         except requests.exceptions.RequestException as e:
             return render(request, 'error.html', {'message': str(e)})

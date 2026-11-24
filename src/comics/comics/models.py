@@ -20,6 +20,8 @@ class ComicBook(models.Model):
     number = models.CharField(max_length=7)
     series_year = models.CharField(max_length=4)
     publisher = models.CharField(max_length=255)
+    store_date = models.DateField(null=True, blank=True)
+    cover_date = models.DateField(null=True, blank=True)
     cover_image_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
@@ -35,9 +37,25 @@ class ComicRole(models.Model):
     
 
 class UserComic(models.Model):
+    STATUS_CHOICES = [
+        ("WANT", "Want to Read/Collect"),
+        ("COLLECTED", "Collected"),
+        ("READ", "Read"),
+    ]
+    
+    LIST_TYPE_CHOICES = [
+        ("BACKLOG", "Backlog/Back Issues"),
+        ("PULL", "Pull List"),
+    ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     comic = models.ForeignKey(ComicBook, on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='WANT')
+    list_type = models.CharField(max_length=10, choices=LIST_TYPE_CHOICES, default="Backlog")
+    # source_list = models.ForeignKey('ReadingList', null=True, blank=True, on_delete=models.SET_NULL)
     added_at = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        unique_together = ('user', 'comic')
+    
     def __str__(self):
-        return f"{self.user.username} follows {self.comic.title}"
+        return f"{self.user.username} - {self.comic.title} ({self.get_status_display()})"
