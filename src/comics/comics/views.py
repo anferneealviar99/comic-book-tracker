@@ -3,7 +3,8 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import ComicBook, UserComic, Role, Person, ComicRole
+from django.contrib import messages
+from .models import ComicBook, UserComic, Role, Person, ComicRole, ReadingList, ListItem
 from accounts.models import CustomUser
 import requests 
 import regex as re
@@ -373,3 +374,39 @@ def process_comic_roles(data, comic):
                 role_name = role['name']
                 role, _ = Role.objects.get_or_create(name=role_name)
                 ComicRole.objects.get_or_create(comic=comic, person=person, role=role)
+                
+@login_required
+def reading_list_detail(request, pk):
+    """ Obtains the reading list, and handles mass addition by a user """
+    
+    # Get a reading list; return a 404 if it doesn't exist
+    reading_list = get_object_or_404(ReadingList, pk=pk)
+    
+    # Get all the items in the list
+    list_items = reading_list.items.select_related('comic').all()
+    
+    # Handle the mass addition
+    if request.method == 'POST':
+        comics_added = 0
+        
+        for item in list_items:
+            user_comic, created = UserComic.objects.get_or_create(
+                user=request.user,
+                comic=item.comic,
+                defaults = {
+                    'status': 'WANT',
+                    'list_type': 'BACKLOG'
+                }
+            )
+            
+            # Add the reading list to the source list field inside the UserComic object
+            if not user_comic.source_lists.filter(id=reading_list.id).exists():
+                user_comic.source_lists.add(reading_list)
+                comics_added += 1
+                
+        messages.success(request, f'Successfully added {comics_added} comics from {reading_list}.')
+        
+    return render(request, 'reading_list_detail.html', {
+        'reading_list': reading_list,
+        'list_items': list_items
+    })

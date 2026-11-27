@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView 
-from .views import user_comics, add_comic, fetch_comic_details, select_comic, homepage_view, new_comics, remove_comic, change_username
+from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,14 +25,15 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("", homepage_view, name="home"),
-    path('my-comics/', user_comics, name='user_comics'),
-    path('add-comic/', add_comic, name='add_comic'),
-    path('select-comic/', select_comic, name='select_comic'),
-    path('fetch-comic-details/<str:comic_id>/', fetch_comic_details, name='fetch_comic_details'),
-    path('new-comics/', new_comics, name='new_comics'),
-    path('remove-comic/<str:comic_id>', remove_comic, name='remove_comic'),
-    path('change-username/', change_username, name='change_username')
+    path("", views.homepage_view, name="home"),
+    path('my-comics/', views.user_comics, name='user_comics'),
+    path('add-comic/', views.add_comic, name='add_comic'),
+    path('select-comic/', views.select_comic, name='select_comic'),
+    path('fetch-comic-details/<str:comic_id>/', views.fetch_comic_details, name='fetch_comic_details'),
+    path('new-comics/', views.new_comics, name='new_comics'),
+    path('remove-comic/<str:comic_id>', views.remove_comic, name='remove_comic'),
+    path('change-username/', views.change_username, name='change_username'),
+    path('reading-list/<int:pk>/', views.reading_list_detail, name='reading_list_detail')
 ] + static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
 
 
