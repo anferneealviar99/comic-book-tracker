@@ -28,13 +28,31 @@ class ComicBook(models.Model):
         return self.title
     
 class ComicRole(models.Model):
-    comic = models.ForeignKey(ComicBook, on_delete=models.CASCADE)
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    comic = models.ForeignKey("ComicBook", on_delete=models.CASCADE)
+    person = models.ForeignKey("Person", on_delete=models.CASCADE)
+    role = models.ForeignKey("Role", on_delete=models.CASCADE)
     
     def __str__(self):
         return f"{self.person.name} - {self.role.name} for {self.comic.title}"
     
+class ReadingList(models.Model):
+    title = models.CharField(max_length=64)
+    description = models.TextField(blank=True)
+    creator = models.ForeignKey("accounts.CustomUser", on_delete=models.CASCADE, related_name='created_lists')
+    is_curated = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.title}"
+
+class ListItem(models.Model):
+    reading_list = models.ForeignKey("ReadingList", on_delete=models.CASCADE, related_name='items')
+    comic = models.ForeignKey("ComicBook", on_delete=models.CASCADE, related_name='list_items')
+    order_index = models.IntegerField(default=0)
+    
+    class Meta:
+        unique_together = ('reading_list', 'comic')
+        ordering = ['order_index']
 
 class UserComic(models.Model):
     STATUS_CHOICES = [
@@ -47,11 +65,11 @@ class UserComic(models.Model):
         ("BACKLOG", "Backlog/Back Issues"),
         ("PULL", "Pull List"),
     ]
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    comic = models.ForeignKey(ComicBook, on_delete=models.CASCADE)
+    user = models.ForeignKey("accounts.CustomUser", on_delete=models.CASCADE)
+    comic = models.ForeignKey("ComicBook", on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='WANT')
-    list_type = models.CharField(max_length=10, choices=LIST_TYPE_CHOICES, default="Backlog")
-    # source_list = models.ForeignKey('ReadingList', null=True, blank=True, on_delete=models.SET_NULL)
+    list_type = models.CharField(max_length=10, choices=LIST_TYPE_CHOICES, default="BACKLOG")
+    source_lists = models.ManyToManyField(ReadingList, blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
